@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html ng-app="myApp">
+<head>
+    <title>Travel and Entertainment Search</title>
+
+    <!-- load bootstrap via CDN -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+    <!-- load angular via CDN -->
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
+    <script src="app.js"></script>
+</head>
+<body>
+
+    <div class="container" ng-controller="mainController">
+
+        <div >
+            <h1>Hello {{name + ". How are you?"}}</h1>
+            <label for="answer">answer: </label>
+            <input type="text" id="answer" ng-model="answer1">
+        </div>
+        <hr>
+        <h1>my answer {{answer1}}</h1>
+
+    </div>
+
+</body>
+</html>
