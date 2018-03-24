@@ -1,0 +1,17 @@
+form {
+    margin: 10px auto;
+    width: 1000px;
+    padding: 20px 150px;
+    border: 2px solid #cccccc;
+    border-radius: 10px;
+    background-color: #f8f8f8;
+
+}
+
+#star {
+    color: red;
+}
+
+#clear {
+    border: 1px solid #cccccc;
+}

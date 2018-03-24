@@ -2,26 +2,67 @@
 <html ng-app="myApp">
 <head>
     <title>Travel and Entertainment Search</title>
-
-    <!-- load bootstrap via CDN -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
-    <!-- load angular via CDN -->
-    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
-    <script src="app.js"></script>
+    <link rel="stylesheet" type="text/css" href="main.css">
 </head>
 <body>
 
-    <div class="container" ng-controller="mainController">
-
-        <div >
-            <h1>Hello {{name + ". How are you?"}}</h1>
-            <label for="answer">answer: </label>
-            <input type="text" id="answer" ng-model="answer1">
+    <form name="searchForm" ng-controller="formController">
+        <div class="row">
+            <span class="col-sm-3"></span>
+            <h2 class="col-sm-9">Travel and Entertainment Search</h2>
         </div>
-        <hr>
-        <h1>my answer {{answer1}}</h1>
+        <div class="form-group row">
+            <label for="keyword" class="col-sm-3 col-form-label">Keyword<span id="star">*</span></label>
+            <div class="col-sm-9">
+                <input id="keyword" class="form-control" type="text" name="keyword" ng-model="keyword" required>
+           <!--      <div ng-show="searchForm.keyword.$invalid"> -->
+                    <div style="color:red" ng-show="searchForm.keyword.$invalid && searchForm.keyword.$touched">Please enter a keyword.</div>
+       <!--          </div> -->
+            </div>
+        </div>
+        <div class="form-group row">
+            <label for="category" class="col-sm-3 col-form-label">Category</label>
+            <div class="col-sm-6">
+                <select id="category" class="form-control" name="category">
+                <option value="">Default</option>
+                <option value="">Airport</option>
+                </select>          
+            </div>  
+        </div>
+        <div class="form-group row">
+            <label for="distance" class="col-sm-3 col-form-label">Distance (miles)</label>
+            <div class="col-sm-6">
+                <input id="distance" class="form-control" type="text" name="distance" placeholder="10">
+            </div>
+        </div>
+        <div class="form-group row">
+            <label for="from" class="col-sm-3 col-form-label">From<span id="star">*</span></label>
+            <div id="from" class="col-sm-9">
+                <div class="form-check">
+                    <input id="here" class="form-check-input" type="radio" name="location" checked>
+                    <label for="here" class="form-check-label">Current location</label>
+                </div>
+                <div class="form-check">
+                    <input id="not_here" class="form-check-input" type="radio" name="location">
+                    <label for="not_here" class="form-check-label">Other. Please specify:</label>
+                    <input id="otherLocation" class="form-control" type="text" placeholder="Enter a location" disabled> 
+                </div>
+            </div>
+        </div>
 
-    </div>
+      <button id="search" class="btn btn-primary" type="button" ng-disabled="searchForm.keyword.$invalid"><i class="fas fa-search"></i> Search</button>
+      <button id="clear" class="btn" type="button">Clear</button>
+    </form>
 
+
+
+    <!-- load bootstrap via CDN -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+    <!-- load Font Awesome via CDN -->
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.8/css/solid.css" integrity="sha384-v2Tw72dyUXeU3y4aM2Y0tBJQkGfplr39mxZqlTBDUZAb9BGoC40+rdFCG0m10lXk" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.8/css/fontawesome.css" integrity="sha384-q3jl8XQu1OpdLgGFvNRnPdj5VIlCvgsDQTQB6owSOHWlAurxul7f+JpUOVdAiJ5P" crossorigin="anonymous">
+    <!-- load angular via CDN -->
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
+    <script src="app.js"></script>
 </body>
 </html>
