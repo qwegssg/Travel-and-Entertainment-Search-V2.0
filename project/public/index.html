@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html ng-app="myApp" ng-controller="appController">
+<head>
+    <title>Travel and Entertainment Search</title>
+    <link rel="stylesheet" type="text/css" href="./css/index.css">
+    <!-- load bootstrap via CDN -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+    <!-- load Font Awesome via CDN -->
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.9/css/all.css" integrity="sha384-5SOiIsAziJl6AWe0HWRKTXlfcSHKmYV4RBF18PPJ173Kzn7jzMyFuTtk8JA7QQG1" crossorigin="anonymous">
+</head>
+<body>
+
+    <form name="searchForm" ng-submit="submitForm()">
+        <div class="row">
+            <span class="col-sm-3"></span>
+            <h3 class="col-sm-9">Travel and Entertainment Search</h2>
+        </div>
+        <div class="form-group row">
+            <label for="keyword" class="col-sm-3 col-form-label">Keyword<span id="star">*</span></label>
+            <div class="col-sm-9">
+                <input id="keyword" class="form-control" type="text" name="keyword" required
+                        ng-class="{'border border-danger': searchForm.keyword.$invalid && searchForm.keyword.$touched}" 
+                        ng-model="keyword">
+                <div style="color:red" 
+                        ng-show="searchForm.keyword.$invalid && searchForm.keyword.$touched">
+                        Please enter a keyword.
+                </div>
+            </div>
+        </div>
+        <div class="form-group row">
+            <label for="category" class="col-sm-3 col-form-label">Category</label>
+            <div class="col-sm-6">
+                <select id="category" class="form-control" name="category"
+                    ng-model="selectedType" 
+                    ng-options="type.name for type in categories" 
+                    >
+                </select>
+            </div>  
+        </div>
+        <div class="form-group row">
+            <label for="distance" class="col-sm-3 col-form-label">Distance (miles)</label>
+            <div class="col-sm-6">
+                <input id="distance" class="form-control" type="text" name="distance" placeholder="10" ng-model="distance">
+            </div>
+        </div>
+        <div class="form-group row">
+            <label for="from" class="col-sm-3 col-form-label">From<span id="star">*</span></label>
+            <div id="from" class="col-sm-9">
+                <div class="form-check">
+                    <input id="here" class="form-check-input" type="radio" name="location"    ng-value="location" 
+                        ng-click="enableHere()" checked>
+                    <label for="here" class="form-check-label">Current location</label>
+                </div>
+                <div class="form-check">
+                    <input id="not_here" class="form-check-input" type="radio" name="location" ng-click="enableOther()">
+                    <label for="not_here" class="form-check-label">Other. Please specify:</label>
+                    <input id="otherLocation" class="form-control" type="text" name="otherLocation" placeholder="Enter a location" required 
+                            ng-class="{'border border-danger': searchForm.otherLocation.$invalid && searchForm.otherLocation.$touched}" 
+                            ng-disabled="isDisabled" 
+                            ng-model="otherLocation" 
+                            googleplace>
+                    <div style="color:red" 
+                            ng-if="searchForm.otherLocation.$invalid && (searchForm.otherLocation.$touched || searchForm.otherLocation.$dirty)"
+                            >
+                            Please enter a location.
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <button id="search" class="btn btn-primary" type="submit" 
+                ng-disabled="searchForm.keyword.$invalid || isNotFetched">
+                <i class="fas fa-search"></i> 
+                Search
+        </button>
+        <button id="clear" class="btn" type="button" ng-click="clear()">Clear</button>
+    </form>
+
+    <!-- use nav-pills instead -->
+    <div id="buttonList">
+        <button id="resultButton" class="btn btn-primary" type="button">Results</button>
+        <button id="favoriteButton" class="btn btn-light" type="button">Favorites</button>
+    </div>
+
+
+
+
+
+    <div id="progressBar" class="progress" ng-if="progressing">
+        <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100" style="width: 50%">
+        </div>
+    </div>
+
+
+    <div id="warnAlert" class="alert alert-warning" role="alert" ng-if="warnAlert">
+        No records.
+    </div>
+
+    <div ng-if="showTable">
+        <button id="detailsButton" class="btn" type="button" disabled>Details <i class="fas fa-angle-right"></i></button>
+
+        <table id="resultTable" class="table">
+            <thead>
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Category</th>
+                    <th scope="col">Name</th>
+                    <th scope="col">Address</th>
+                    <th scope="col">Favorite</th>
+                    <th scope="col">Details</th>
+                </tr> 
+            </thead>
+            <tbody>
+                <tr ng-repeat="x in places" id="placeRow">
+                    <th class="align-middle">{{ $index + 1 }}</th>
+                    <td class="align-middle"><img src="{{ x.icon }}"></td>
+                    <td class="align-middle">{{ x.name }}</td>
+                    <td class="align-middle">{{ x.vicinity }}</td>
+                    <td class="align-middle"><i id="favoriteIcon" class="far fa-star"></i></td>
+                    <td class="align-middle"><i id="detailsIcon" class="fas fa-angle-right"></td>
+                </tr>            
+            </tbody>
+        </table>
+
+        <div id="pageButton">        
+            <button id="previousButton" class="btn" type="button" ng-if="previousButton" ng-click="showPreviousPage()">Previous</button>
+            <button id="nextButton" class="btn" type="button" ng-if="nextButton" ng-click="showNextPage()">Next</button>
+        </div>
+    </div>
+
+
+   
+
+    <!-- load angular via CDN -->
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
+     <!-- client-side library: loads all of the main JavaScript objects and symbols for use in the Maps JavaScript API.  -->
+    <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDhC1Tha8FKORJfe7--SYluRWe_n1LVMoE&libraries=places"></script>
+    <script src="./js/index.js"></script>
+    <script src="./js/function.js"></script>
+</body>
+</html>

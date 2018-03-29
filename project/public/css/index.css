@@ -1,0 +1,86 @@
+form {
+    margin: 10px auto;
+    width: 1000px;
+    padding: 20px 150px;
+    border: 2px solid #cccccc;
+    border-radius: 10px;
+    background-color: #f8f8f8;
+}
+
+h3 {
+    padding-bottom: 10px;
+}
+
+#star {
+    color: red;
+}
+
+#clear {
+    border: 1px solid #cccccc;
+}
+
+#progressBar {
+    width: 1200px;
+    margin: 100px auto 0;
+
+}
+
+#warnAlert {
+    width: 1200px;
+    margin: 100px auto 0;
+}
+
+#buttonList {
+    margin: 20px auto 30px;
+    text-align: center;
+}
+
+#detailsButton {
+    position: relative;
+    left: 1228px;
+    border: 1px solid #cccccc;
+    margin-bottom: 10px;
+}
+
+#resultTable {
+    margin: 0 auto;
+    width: 1200px;
+}
+
+#placeRow:hover {
+    background-color: #efefef;
+}
+
+#favoriteIcon {
+    width: 40px;
+    height: 40px;
+    border: 1px solid #cccccc;
+    padding: 10px;
+}
+
+#detailsIcon {
+    width: 40px;
+    height: 40px;
+    border: 1px solid #cccccc;
+    padding: 10px;
+}
+
+#pageButton {
+    text-align: center;
+    margin-top: 20px;
+    margin-bottom: 50px;
+}
+
+#nextButton {
+    border: 1px solid #cccccc;
+    text-align: center;
+    width: 120px;
+    margin: 10px;
+}
+
+#previousButton {
+    border: 1px solid #cccccc;
+    text-align: center;
+    width: 120px;
+    margin: 10px;
+}
