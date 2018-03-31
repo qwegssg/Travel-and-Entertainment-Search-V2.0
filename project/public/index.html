@@ -10,19 +10,19 @@
 </head>
 <body>
 
-    <form name="searchForm" ng-submit="submitForm()">
+    <form id="searchForm" name="searchForm" ng-submit=submitForm()>
         <div class="row">
             <span class="col-sm-3"></span>
-            <h3 class="col-sm-9">Travel and Entertainment Search</h2>
+            <h3 id="title" class="col-sm-9">Travel and Entertainment Search</h2>
         </div>
         <div class="form-group row">
             <label for="keyword" class="col-sm-3 col-form-label">Keyword<span id="star">*</span></label>
             <div class="col-sm-9">
                 <input id="keyword" class="form-control" type="text" name="keyword" required
-                        ng-class="{'border border-danger': searchForm.keyword.$invalid && searchForm.keyword.$touched}" 
+                        ng-class="{'border border-danger': searchForm.otherLocation.$invalid && (searchForm.otherLocation.$touched || searchForm.otherLocation.$dirty)}" 
                         ng-model="keyword">
                 <div style="color:red" 
-                        ng-show="searchForm.keyword.$invalid && searchForm.keyword.$touched">
+                        ng-if="searchForm.keyword.$invalid && searchForm.keyword.$touched">
                         Please enter a keyword.
                 </div>
             </div>
@@ -48,16 +48,18 @@
             <div id="from" class="col-sm-9">
                 <div class="form-check">
                     <input id="here" class="form-check-input" type="radio" name="location"    ng-value="location" 
-                        ng-click="enableHere()" checked>
+                        ng-click=enableHere()
+                        ng-checked="checkHere">
                     <label for="here" class="form-check-label">Current location</label>
                 </div>
                 <div class="form-check">
-                    <input id="not_here" class="form-check-input" type="radio" name="location" ng-click="enableOther()">
+                    <input id="not_here" class="form-check-input" type="radio" name="location" ng-click=enableOther() ng-checked="checkOther">
                     <label for="not_here" class="form-check-label">Other. Please specify:</label>
-                    <input id="otherLocation" class="form-control" type="text" name="otherLocation" placeholder="Enter a location" required 
+                    <input id="otherLocation" class="form-control" type="text" name="otherLocation" placeholder="Enter a location"
                             ng-class="{'border border-danger': searchForm.otherLocation.$invalid && searchForm.otherLocation.$touched}" 
                             ng-disabled="isDisabled" 
-                            ng-model="otherLocation" 
+                            ng-model="otherLocation"
+                            ng-required="checkOther" 
                             googleplace>
                     <div style="color:red" 
                             ng-if="searchForm.otherLocation.$invalid && (searchForm.otherLocation.$touched || searchForm.otherLocation.$dirty)"
@@ -73,33 +75,39 @@
                 <i class="fas fa-search"></i> 
                 Search
         </button>
-        <button id="clear" class="btn" type="button" ng-click="clear()">Clear</button>
+        <button id="clear" class="btn" type="button" ng-click=clear()>Clear</button>
     </form>
-
-    <!-- use nav-pills instead -->
-    <div id="buttonList">
-        <button id="resultButton" class="btn btn-primary" type="button">Results</button>
-        <button id="favoriteButton" class="btn btn-light" type="button">Favorites</button>
+    
+    <div class="container">
+         <ul id="resultPills" class="nav nav-pills">
+        <li class="nav-item">
+            <a class="nav-link active" href="javaScript:void(0)">Results</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="javaScript:void(0)">Favorites</a>
+        </li>
+    </ul>   
     </div>
 
 
 
 
 
-    <div id="progressBar" class="progress" ng-if="progressing">
+
+    <div id="progressBar" class="progress" ng-show="progressing">
         <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100" style="width: 50%">
         </div>
     </div>
 
 
-    <div id="warnAlert" class="alert alert-warning" role="alert" ng-if="warnAlert">
+    <div id="warnAlert" class="alert alert-warning" role="alert" ng-show="warnAlert">
         No records.
     </div>
 
-    <div ng-if="showTable">
+    <div ng-show="showTable" class="container">
         <button id="detailsButton" class="btn" type="button" disabled>Details <i class="fas fa-angle-right"></i></button>
 
-        <table id="resultTable" class="table">
+        <table  class="table">
             <thead>
                 <tr>
                     <th scope="col">#</th>
@@ -116,23 +124,125 @@
                     <td class="align-middle"><img src="{{ x.icon }}"></td>
                     <td class="align-middle">{{ x.name }}</td>
                     <td class="align-middle">{{ x.vicinity }}</td>
-                    <td class="align-middle"><i id="favoriteIcon" class="far fa-star"></i></td>
-                    <td class="align-middle"><i id="detailsIcon" class="fas fa-angle-right"></td>
+                    <td class="align-middle"><button id="favoriteIcon" class="btn" type="button"><i class="far fa-star"></i></button></td>
+                    <td class="align-middle">
+                        <button id="detailsIcon" class="btn" type="button" ng-click=showDetail(x.place_id,x.geometry.location)><i class="fas fa-angle-right"></i></button>
+                    </td>
                 </tr>            
             </tbody>
         </table>
 
         <div id="pageButton">        
-            <button id="previousButton" class="btn" type="button" ng-if="previousButton" ng-click="showPreviousPage()">Previous</button>
-            <button id="nextButton" class="btn" type="button" ng-if="nextButton" ng-click="showNextPage()">Next</button>
+            <button id="previousButton" class="btn" type="button" ng-show="previousButton" ng-click=showPreviousPage()>Previous</button>
+            <button id="nextButton" class="btn" type="button" ng-show="nextButton" ng-click=showNextPage()>Next</button>
         </div>
     </div>
 
+    <div class="container">
+        <!-- bootstrap flex -->
+        <h3 class="d-flex justify-content-center">{{detailName}}</h3>
+        <div class="row">
+            <div class="col-2">
+                <button id="listButton" class="btn" type="button"><i class="fas fa-angle-left"></i> List</button>         
+            </div>
+            <div class="col-10 d-flex justify-content-end">
+                <button id="favoriteButton" class="btn" type="button">
+                    <i class="far fa-star"></i>
+                </button>
+                <button style="padding: 0; margin-left: 10px" class="btn" type="button">
+                    <img id="twitter" src="http://cs-server.usc.edu:45678/hw/hw8/images/Twitter.png">
+                </button>         
+            </div>
+         
+        </div>
+        <!-- bootstrap flex -->
+        <ul class="nav nav-tabs d-flex justify-content-end">
+            <li class="nav-item">
+                <a class="nav-link" href="javaScript:void(0)" ng-class="{active: selectInfo}" ng-click=showInfo()>Info</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="javaScript:void(0)" ng-class="{active: selectPhotos}" ng-click=showPhotos()>Photos</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="javaScript:void(0)" ng-class="{active: selectMap}"  ng-click=showMap()>Map</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="javaScript:void(0)" ng-class="{active: selectReviews}"  ng-click=showReviews()>Reviews</a>
+            </li>
+        </ul>
 
-   
+        <table id="infoTab" class="table table-striped" style="margin-top: 20px" ng-show="selectInfo">
+            <tr scope="row" class="row" ng-if="address != undefined">
+                <th class="col-2">Address</th>
+                <td class="col-10">{{address}}</td>
+            </tr>
+            <tr scope="row" class="row" ng-if="phoneNumber != undefined">
+                <th class="col-2">Phone Number</th>
+                <td class="col-10">{{phoneNumber}}</td>
+            </tr>
+            <tr scope="row" class="row" ng-if="priceLevel != ''">
+                <th class="col-2">Price Level</th>
+                <td class="col-10">{{priceLevel}}</td>
+            </tr>
+            <tr scope="row" class="row" ng-if="rating != undefined">
+                <th class="col-2">Rating</th>
+                <td class="col-10">{{rating}}
+                    <div class="starOuter">&starf;&starf;&starf;&starf;&starf;
+                        <div class="ratingStar" style="width: {{starWidth}}">&starf;&starf;&starf;&starf;&starf;</div>
+                    </div>
+                </td>
+            </tr>
+            <tr scope="row" class="row" ng-if="googlePage != undefined">
+                <th class="col-2">Google page</th>
+                <td class="col-10"><a href="{{googlePage}}" target="_blank">{{googlePage}}</a></td>
+            </tr>
+            <tr scope="row" class="row" ng-if="website != undefined">
+                <th class="col-2">Website</th>
+                <td class="col-10"><a href="{{website}}" target="_blank">{{website}}</a></td>
+            </tr>
+            <tr scope="row" class="row" ng-if="hours != undefined">
+                <th class="col-2">Hours</th>
+                <td class="col-10">{{hours}}</td>
+            </tr>
+        </table>
+
+
+        <div id="mapTab" style="margin-top: 20px" ng-show="selectMap">
+            <form>
+                <div class="form-row">
+                    <div class="col-4">
+                        <label for="mapFrom">From</label>
+                        <input type="text" class="form-control" id="mapFrom" ng-model="mapFromLocation" googleplace>
+                    </div>
+                    <div class="col-4">
+                        <label for="mapTo">To</label>
+                        <input style="font-weight: bold" type="text" class="form-control" id="mapTo" ng-model="mapToLocation" ng-readonly=true>
+                    </div>
+                    <div class="col-2">
+                        <label for="mapTravelMode">Travel Mode</label>
+                        <select id="mapTravelMode" class="form-control" name="category"
+                                ng-model="selectedType" 
+                                ng-options="type.name for type in categories">
+                        </select>
+                    </div>
+                    <!-- bootstrap flex -->
+                    <div class="col d-flex align-items-end justify-content-end">
+                        <button id="mapButton" type="submit" class="btn btn-primary">Get Directions</button>
+                    </div>
+                </div>
+            </form>
+            <div>
+                <img id="pegman" class="rounded" src="http://cs-server.usc.edu:45678/hw/hw8/images/Pegman.png">
+            </div>
+            <div id="map"></div>            
+        </div>
+
+    </div>
+
 
     <!-- load angular via CDN -->
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular-animate.js"></script>
      <!-- client-side library: loads all of the main JavaScript objects and symbols for use in the Maps JavaScript API.  -->
     <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDhC1Tha8FKORJfe7--SYluRWe_n1LVMoE&libraries=places"></script>
     <script src="./js/index.js"></script>

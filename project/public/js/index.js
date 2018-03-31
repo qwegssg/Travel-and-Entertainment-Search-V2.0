@@ -1,14 +1,12 @@
 // define an angular module named myApp
 var myApp = angular.module("myApp", []);
 // create a controller for the module
-myApp.controller("appController", ["$scope", "$http", function($scope, $http) {
+myApp.controller("appController", ["$scope", "$http", "$showMap", function($scope, $http, $showMap) {
     $scope.keyword = undefined;
     $scope.otherLocation = undefined;
-    $scope.showTable = false;
-    $scope.warnAlert = false;
-    $scope.previousButton = false;
-    $scope.nextButton = false;
     $scope.isDisabled = true;
+    $scope.checkHere = true;
+    $scope.checkOther = false;
     // the search button is disabled before the user location is fetched
     $scope.isNotFetched = true;
     $scope.categories = [
@@ -46,10 +44,14 @@ myApp.controller("appController", ["$scope", "$http", function($scope, $http) {
     $scope.selectedType = $scope.categories[0];
 
     $scope.enableHere = function() {
+        $scope.checkOther = false;
+        $scope.checkHere = true;
         $scope.isDisabled = true;
     };
 
     $scope.enableOther = function() {
+        $scope.checkOther = true;
+        $scope.checkHere = false;
         $scope.isDisabled = false;
     };
 
@@ -89,28 +91,27 @@ myApp.controller("appController", ["$scope", "$http", function($scope, $http) {
         $scope.showTable = false;
         $scope.previousButton = false;
         $scope.nextButton = false;
-
         if($scope.distance == undefined) {
            $scope.distance = 10; 
         }
+        var otherLocation = $scope.otherLocation;
+        if($scope.checkOther == false) {
+            otherLocation = undefined;
+        }
         var url = "/search?keyword=" + $scope.keyword + "&category=" + $scope.selectedType.value 
                     + "&distance=" + $scope.distance + "&geoLocation=" + $scope.location
-                    + "&otherLocation=" + encodeURI($scope.otherLocation);
-        // console.log(url);
+                    + "&otherLocation=" + encodeURI(otherLocation);
+        console.log(url);
         $http.get(url)
         .then(function(result) {
             var result = result.data;
             if(result.status == "ZERO_RESULTS") {
                 $scope.progressing = false;
                 $scope.warnAlert = true;
-            // geoLocation is fetched
+            // geoLocation is fetched, use the geoLocation to conduct nearby search
             } else if(result.lat != undefined && result.lng != undefined) {
                 var geoLocation = result.lat + "," + result.lng;
-
-                // ??
                 var otherLocation = undefined;
-
-
                 url = "/search?keyword=" + $scope.keyword + "&category=" + $scope.selectedType.value 
                     + "&distance=" + $scope.distance + "&geoLocation=" + geoLocation
                     + "&otherLocation=" + otherLocation;
@@ -119,7 +120,6 @@ myApp.controller("appController", ["$scope", "$http", function($scope, $http) {
                     $scope.progressing = false;
                     $scope.showTable = true;
                     result = result.data;
-                    // console.log(result);
                     $scope.places = result.results;
                     firstPagePlace = $scope.places;
                     next_page_token = result.next_page_token;
@@ -130,6 +130,7 @@ myApp.controller("appController", ["$scope", "$http", function($scope, $http) {
                 $scope.progressing = false;
                 $scope.showTable = true;
                 $scope.places = result.results;
+                // console.log($scope.places);
                 firstPagePlace = $scope.places;
                 next_page_token = result.next_page_token;
                 nextPageCheck(next_page_token);
@@ -155,7 +156,6 @@ myApp.controller("appController", ["$scope", "$http", function($scope, $http) {
             if(next_page_token != undefined || secondPagePlace != "") {
                 $scope.nextButton = true;                
             }
-
         }
     }
 
@@ -208,16 +208,96 @@ myApp.controller("appController", ["$scope", "$http", function($scope, $http) {
             $scope.places = firstPagePlace;
             nextPageCheck(next_page_token);
         }
-
     };
 
+    $scope.showDetail = function(place_id, location) {
+        // console.log(location);
+        var map = new google.maps.Map(document.getElementById('map'), {
+            center: {lat: location.lat, lng: location.lng},
+            zoom: 15
+        });
+        var marker = new google.maps.Marker({
+            map: map,
+            position: {lat: location.lat, lng: location.lng}
+        });
+        $showMap.fetchDetail(place_id, map)
+            .then(
+                function(res) {
+                    console.log(res);
+                    $scope.detailName = res.name;
+                    $scope.address = res.formatted_address;
+                    $scope.phoneNumber = res.international_phone_number;
+                    $scope.priceLevel = "";
+                    for(var i = 0; i < res.price_level; i++) {
+                        $scope.priceLevel += "$";
+                    }
+                    $scope.rating = res.rating;
+                    $scope.starWidth = Math.round($scope.rating / 5.0 * 100) + "%";
+                    console.log($scope.starWidth);
+                    $scope.googlePage = res.url;
+                    $scope.website = res.website;
 
+                    $scope.hours = "need to be implemented!";
+                    $scope.selectInfo = true;
+                    $scope.mapToLocation = res.name + ", " + res.formatted_address;
+                });
+    };
+
+    $scope.showInfo = function() {
+        $scope.selectInfo = true;
+        $scope.selectPhotos = false;
+        $scope.selectMap = false;
+        $scope.selectReviews = false;
+    }
+
+    $scope.showPhotos = function() {
+        $scope.selectPhotos = true;
+        $scope.selectInfo = false;
+        $scope.selectMap = false;
+        $scope.selectReviews = false;
+    };
+
+    $scope.showMap = function() {
+        $scope.selectMap = true;
+        $scope.selectPhotos = false;
+        $scope.selectInfo = false;
+        $scope.selectReviews = false;
+    };
+
+    $scope.showReviews = function() {
+        $scope.selectReviews = true;
+        $scope.selectMap = false;
+        $scope.selectPhotos = false;
+        $scope.selectInfo = false;
+    };
 
 }]);
 
+myApp.service("$showMap", function($q) {
 
+    // this.initMap = function(lat, lng) {
+    //     this.map = new google.maps.Map(document.getElementById('map'), {
+    //         center: {lat: lat, lng: lng},
+    //         zoom: 15
+    //     });      
+    // }
 
-
+    this.fetchDetail = function(place_id, map) {
+        var defer = $q.defer();
+        var service = new google.maps.places.PlacesService(map);
+        var request = {
+            placeId: place_id
+        };  
+        service.getDetails(request, function(placeDetail, status) {
+            if (status == google.maps.places.PlacesServiceStatus.OK) {
+                defer.resolve(placeDetail);
+            } else {
+                defer.reject(status);
+            }
+        });   
+        return defer.promise;       
+    }
+});
 
 myApp.directive('googleplace', function() {
     return {
