@@ -13,7 +13,7 @@ app.get("/search", function(req, res) {
     // the value from client side is string type
     if(req.query.otherLocation != "undefined") {
         var urlOfMap = "https://maps.googleapis.com/maps/api/geocode/json?address=" 
-                        + req.query.otherLocation + "&key=AIzaSyDhC1Tha8FKORJfe7--SYluRWe_n1LVMoE";
+                        + req.query.otherLocation + "&key=AIzaSyCAOh4hsHZ7zKU-71Jn7yql0LcrsA_iVEM";
         // with https.get, req & req.end is automatically set.
         https.get(urlOfMap, function(response) {
             response.on("data", function(data) {
@@ -47,11 +47,11 @@ app.get("/search", function(req, res) {
         if(type == "default") {
             urlOfPlace = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=" 
                         + location + "&radius=" + radius + "&keyword=" 
-                        + keyword + "&key=AIzaSyDhC1Tha8FKORJfe7--SYluRWe_n1LVMoE";
+                        + keyword + "&key=AIzaSyCAOh4hsHZ7zKU-71Jn7yql0LcrsA_iVEM";
         } else {
             urlOfPlace = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=" 
                         + location + "&radius=" + radius + "&type=" + type + "&keyword=" 
-                        + keyword + "&key=AIzaSyDhC1Tha8FKORJfe7--SYluRWe_n1LVMoE";
+                        + keyword + "&key=AIzaSyCAOh4hsHZ7zKU-71Jn7yql0LcrsA_iVEM";
         }
 
         https.get(urlOfPlace, function(response) {
@@ -72,7 +72,7 @@ app.get("/next", function(req, res) {
     var next_page_token = req.query.next_page_token;
     var responseData = "";
     var nextPageUrl = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?pagetoken=" 
-                        + next_page_token + "&key=AIzaSyDhC1Tha8FKORJfe7--SYluRWe_n1LVMoE";
+                        + next_page_token + "&key=AIzaSyCAOh4hsHZ7zKU-71Jn7yql0LcrsA_iVEM";
     https.get(nextPageUrl, function(response) {
         response.on("data", function(data) {
             // JSON format
@@ -84,7 +84,49 @@ app.get("/next", function(req, res) {
     });
 });
 
+app.get("/yelpSearch", function(req, res) {
+    var responseData = "";
+    var yelpUrl = "";
+    if(req.query.address1 != undefined) {
+        yelpUrl = encodeURI("/v3/businesses/matches/best?name=" + req.query.name 
+                + "&city=" + req.query.city + "&state=" + req.query.state + "&country=US&address1=" + req.query.address1);
+    } else {
+        yelpUrl = encodeURI("/v3/businesses/matches/best?name=" + req.query.name 
+                + "&city=" + req.query.city + "&state=" + req.query.state + "&country=US");
+    }
+    // console.log(yelpUrl);
+    var options = {
+        host: "api.yelp.com",
+        path: yelpUrl,
+        headers: {"Authorization": "Bearer gyqyD1vhiuNFbMZRY4Dp9oM9PoIKy26wPoxsAfhPtQdKzrerXDQERSnIhNU0YrIMZ3fzo2kOaYtqG5QuP9JKgIeewBbkHbIx_Q1mVVhnvOUa7D4_EdyYJ4rxbLzBWnYx"}
+    };
+    https.get(options, function(response) {
+            response.on("data", function(resultData) {
+                responseData += resultData;
+            });
+            response.on("end", function() {
+                res.send(responseData);
+        });    
+    });
+});
 
+app.get("/yelpReview", function(req, res) {
+    var responseData = "";
+    var yelpReviewUrl = "/v3/businesses/" + req.query.id + "/reviews";
+    var options = {
+        host: "api.yelp.com",
+        path: yelpReviewUrl,
+        headers: {"Authorization": "Bearer gyqyD1vhiuNFbMZRY4Dp9oM9PoIKy26wPoxsAfhPtQdKzrerXDQERSnIhNU0YrIMZ3fzo2kOaYtqG5QuP9JKgIeewBbkHbIx_Q1mVVhnvOUa7D4_EdyYJ4rxbLzBWnYx"}
+    };
+    https.get(options, function(response) {
+        response.on("data", function(resultData) {
+            responseData += resultData;
+        });
+        response.on("end", function() {
+            res.send(responseData);
+        });
+    });
+});
 
 
 app.listen(5000, function () {

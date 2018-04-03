@@ -18,9 +18,10 @@
         <div class="form-group row">
             <label for="keyword" class="col-sm-3 col-form-label">Keyword<span id="star">*</span></label>
             <div class="col-sm-9">
-                <input id="keyword" class="form-control" type="text" name="keyword" required
-                        ng-class="{'border border-danger': searchForm.otherLocation.$invalid && (searchForm.otherLocation.$touched || searchForm.otherLocation.$dirty)}" 
-                        ng-model="keyword">
+                <input id="keyword" class="form-control" type="text" name="keyword"
+                        ng-class="{'borderDanger': searchForm.keyword.$invalid && (searchForm.keyword.$touched || searchForm.keyword.$dirty)}" 
+                        ng-model="keyword"
+                        ng-required="requireKeyword">
                 <div style="color:red" 
                         ng-if="searchForm.keyword.$invalid && searchForm.keyword.$touched">
                         Please enter a keyword.
@@ -56,7 +57,7 @@
                     <input id="not_here" class="form-check-input" type="radio" name="location" ng-click=enableOther() ng-checked="checkOther">
                     <label for="not_here" class="form-check-label">Other. Please specify:</label>
                     <input id="otherLocation" class="form-control" type="text" name="otherLocation" placeholder="Enter a location"
-                            ng-class="{'border border-danger': searchForm.otherLocation.$invalid && searchForm.otherLocation.$touched}" 
+                            ng-class="{'borderDanger': searchForm.otherLocation.$invalid && searchForm.otherLocation.$touched}" 
                             ng-disabled="isDisabled" 
                             ng-model="otherLocation"
                             ng-required="checkOther" 
@@ -104,10 +105,13 @@
         No records.
     </div>
 
-    <div ng-show="showTable" class="container">
-        <button id="detailsButton" class="btn" type="button" disabled>Details <i class="fas fa-angle-right"></i></button>
 
-        <table  class="table">
+
+    <!-- Places Table -->
+    <div ng-show="showTable" class="container">
+        <button id="detailsButton" class="btn" type="button" ng-disabled="isNotTriggered">Details <i class="fas fa-angle-right"></i></button>
+
+        <table class="table">
             <thead>
                 <tr>
                     <th scope="col">#</th>
@@ -138,12 +142,17 @@
         </div>
     </div>
 
-    <div class="container">
+
+
+
+
+    <!-- Details Table -->
+    <div  id="detailsTable" class="container animate-show" ng-show="switchDetails">
         <!-- bootstrap flex -->
         <h3 class="d-flex justify-content-center">{{detailName}}</h3>
         <div class="row">
             <div class="col-2">
-                <button id="listButton" class="btn" type="button"><i class="fas fa-angle-left"></i> List</button>         
+                <button id="listButton" class="btn" type="button" ng-click="switchPlaces=true"><i class="fas fa-angle-left"></i> List</button>         
             </div>
             <div class="col-10 d-flex justify-content-end">
                 <button id="favoriteButton" class="btn" type="button">
@@ -207,45 +216,160 @@
         </table>
 
 
+
+
+
+        <div id="photosTap"  style="margin-top: 20px; margin-bottom: 50px" ng-show="selectPhotos">
+           <!--  <img src={{photoUrl}}> -->
+
+            <div id="detailPhotos" class="card-columns">
+                <div class="card" ng-repeat="url in photoUrl">
+                    <img class="card-img-top" src={{url}} alt="Card image cap" >
+                </div>
+            </div>
+        </div>
+
+        <div id="warnAlertPhotos" class="alert alert-warning" role="alert" ng-show="warnAlertPhotos">
+        No records.
+        </div>
+ 
+
+
+
+
         <div id="mapTab" style="margin-top: 20px" ng-show="selectMap">
-            <form>
+            <form name="mapForm">
                 <div class="form-row">
                     <div class="col-4">
                         <label for="mapFrom">From</label>
-                        <input type="text" class="form-control" id="mapFrom" ng-model="mapFromLocation" googleplace>
+                        <input name="mapFrom" type="text" class="form-control" id="mapFrom" ng-model="mapFromLocation" required googleplace>
                     </div>
                     <div class="col-4">
                         <label for="mapTo">To</label>
-                        <input style="font-weight: bold" type="text" class="form-control" id="mapTo" ng-model="mapToLocation" ng-readonly=true>
+                        <input style="font-weight: bold" type="text" class="form-control" id="mapTo" 
+                        ng-model="mapToLocation" 
+                        ng-readonly=true>
                     </div>
                     <div class="col-2">
                         <label for="mapTravelMode">Travel Mode</label>
-                        <select id="mapTravelMode" class="form-control" name="category"
-                                ng-model="selectedType" 
-                                ng-options="type.name for type in categories">
+                        <select id="mapTravelMode" class="form-control"
+                                ng-model="selectedModes"
+                                ng-options="mode.name for mode in travelModes">
                         </select>
                     </div>
                     <!-- bootstrap flex -->
                     <div class="col d-flex align-items-end justify-content-end">
-                        <button id="mapButton" type="submit" class="btn btn-primary">Get Directions</button>
+                        <button id="mapButton" type="submit" class="btn btn-primary" ng-disabled="mapForm.mapFrom.$invalid"
+                        ng-click=getDirections()>Get Directions</button>
                     </div>
                 </div>
             </form>
             <div>
-                <img id="pegman" class="rounded" src="http://cs-server.usc.edu:45678/hw/hw8/images/Pegman.png">
+                <button id="pegmanButton" class="btn" ng-click=showStreetView()><img id="pegman" class="rounded" src={{streetViewIcon}}></button>
             </div>
-            <div id="map"></div>            
+            <!-- NOT_FOUND alert -->
+            <div id="warnAlertMap" class="alert alert-danger" role="alert" ng-show="warnAlertMap">
+                Failed to get search results.
+            </div>
+            <div id="pano" ng-show="showStreet"></div>  
+            <div id="mapForStreetView" ng-show="showStreet"></div>  
+            <div id="map" ng-hide="isWarnAlertMap"></div>
+            <div id="directionsPanel" ng-hide="isHideDirPanel"></div>
+        </div>
+
+
+
+        <div id="reviewsTab" ng-show="selectReviews">
+            <!-- review bottoms -->
+            <div style="margin-top:20px;margin-bottom:20px" class="d-flex flex-row">
+                <div class="dropdown">
+                    <button class="btn btn-secondary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    {{reviewButton}}
+                    </button>
+                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                        <a class="dropdown-item" href="javaScript:void(0)" ng-click=switchGoogleReview()>Google Reviews</a>
+                        <a class="dropdown-item" href="javaScript:void(0)" ng-click=switchYelpReview()>Yelp Reviews</a>
+                    </div>
+                </div>   
+                <div style="margin-left:20px" class="dropdown">
+                    <button class="btn btn-secondary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    {{sortButton}}
+                    </button>
+                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                        <a class="dropdown-item" href="javaScript:void(0)" ng-click=reviewOrder(1)>Default Order</a>
+                        <a class="dropdown-item" href="javaScript:void(0)" ng-click=reviewOrder(2)>Highest Rating</a>
+                        <a class="dropdown-item" href="javaScript:void(0)" ng-click=reviewOrder(3)>Lowest Rating</a>
+                        <a class="dropdown-item" href="javaScript:void(0)" ng-click=reviewOrder(4)>Most Recent</a>
+                        <a class="dropdown-item" href="javaScript:void(0)" ng-click=reviewOrder(5)>Least Recent</a>  
+                    </div>
+                </div> 
+            </div>
+            <!-- reviews warning -->
+            <div id="warnAlertReviews" class="alert alert-warning faded" role="alert" ng-if="warnAlertReviews && (warnAlertReviewsYelp || warnAlertReviewsGoogle)">
+                No records.
+            </div>
+            <!-- google reviews -->
+            <div class="row border rounded reviewsTable faded" 
+                    ng-repeat="review in reviews | orderBy: reviewSortGoogle"
+                    ng-if="showGoogleReview">
+                <div style="text-align:center;padding:0" class="col-1">
+                    <a target="_blank" href="{{review.author_url}}">                    
+                        <img width="50" style="padding:0" src="{{review.profile_photo_url}}" >
+                    </a>
+                </div>
+                <div style="padding-left:0;padding-right:10px" class="col-11">
+                    <div style="color:#337cf6">
+                        <a target="_blank" href="{{review.author_url}}">
+                            {{review.author_name}}    
+                        </a>
+                    </div>
+                    <span style="color:#da7538">{{review.ratingStar}}</span>
+                    <span style="color:grey">{{review.date}}</span>
+                    <div>{{review.text}}</div>
+                </div>
+            </div>
+            <!-- yelp reviews -->
+            <div class="row border rounded reviewsTable faded" 
+                    ng-repeat="yelpReview in yelpReviews | orderBy: reviewSortYelp"
+                    ng-if="showYelpReview">
+                <div style="text-align:center;padding:0" class="col-1">
+                    <a target="_blank" href="{{yelpReview.url}}">
+                        <img class="rounded-circle" width="50" height="50" style="padding:0" src="{{yelpReview.user.image_url}}" >                        
+                    </a>
+                </div>
+                <div style="padding-left:0;padding-right:10px" class="col-11">
+                    <div style="color:#337cf6">
+                        <a target="_blank" href="{{yelpReview.url}}">
+                            {{yelpReview.user.name}}
+                        </a>
+                    </div>
+                    <span style="color:#da7538">{{yelpReview.ratingStar}}</span>
+                    <span style="color:grey">{{yelpReview.time_created}}</span>
+                    <div>{{yelpReview.text}}</div>
+                </div> 
+            </div>
         </div>
 
     </div>
 
 
+  
+
+
+
+
+
+
+    <!-- load jQuery, Popper.js, and our Bootstrap JavaScript plugins. -->
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
     <!-- load angular via CDN -->
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular-animate.js"></script>
      <!-- client-side library: loads all of the main JavaScript objects and symbols for use in the Maps JavaScript API.  -->
-    <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDhC1Tha8FKORJfe7--SYluRWe_n1LVMoE&libraries=places"></script>
+    <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCAOh4hsHZ7zKU-71Jn7yql0LcrsA_iVEM&libraries=places"></script>
     <script src="./js/index.js"></script>
-    <script src="./js/function.js"></script>
+<!--     <script src="./js/function.js"></script> -->
 </body>
 </html>
