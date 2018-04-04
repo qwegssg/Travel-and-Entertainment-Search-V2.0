@@ -58,6 +58,25 @@ myApp.controller("appController", ["$scope", "$http", "$showMap", "$showDirectio
     // set the default category value
     $scope.selectedType = $scope.categories[0];
 
+
+
+
+    // localStorage.removeItem("placesStorage");
+
+
+    var placesStorageInfo = localStorage.getItem("placesStorage");
+    placesStorageInfo = JSON.parse(placesStorageInfo);
+    // console.log(typeof placesStorageInfo);
+    console.log(placesStorageInfo);   
+    $scope.localPlaces = placesStorageInfo;
+
+
+
+
+
+
+
+
     $scope.enableHere = function() {
         $scope.checkOther = false;
         $scope.checkHere = true;
@@ -73,7 +92,7 @@ myApp.controller("appController", ["$scope", "$http", "$showMap", "$showDirectio
 
 
 
-    // How to immediately reset the form, regardless of the animation, 
+    //immediately reset the form, regardless of the animation, 
     // which can be applied to search button
 
     // reset the form, need to be implemented
@@ -123,6 +142,8 @@ myApp.controller("appController", ["$scope", "$http", "$showMap", "$showDirectio
         $scope.showTable = false;
         $scope.toDetail = false;
         document.getElementById("placeTable").classList.remove("my-switch-animation-reverse");
+        document.getElementById("favoriteTable").classList.remove("my-switch-animation-reverse");
+        $scope.addToFavorite = false;
     }
 
     $scope.submitForm = function() {
@@ -258,6 +279,7 @@ myApp.controller("appController", ["$scope", "$http", "$showMap", "$showDirectio
         // for animation
         $scope.toDetail = true;
         $scope.showTable = false;
+        $scope.showFavoriteTable = false;
 
         // show progressing bar
         $scope.progressing = true;
@@ -287,6 +309,8 @@ myApp.controller("appController", ["$scope", "$http", "$showMap", "$showDirectio
         // disable twitter button
         $scope.twitterDisabled = true;
         $scope.twitterSrc = "javaScript:void(0)";
+        // store place detail for the use of favorite
+        $scope.placeDetailInfo = "";
 
         // set map
         var map = new google.maps.Map(document.getElementById('map'), {
@@ -328,6 +352,9 @@ myApp.controller("appController", ["$scope", "$http", "$showMap", "$showDirectio
         $showMap.fetchDetail(place_id, map)
             .then(
                 function(res) {
+
+                    $scope.placeDetailInfo = res;
+
                     // end procressing bar
                     $scope.progressing = false;
                     // set the background color of the selected row
@@ -641,37 +668,68 @@ myApp.controller("appController", ["$scope", "$http", "$showMap", "$showDirectio
     };
 
     $scope.goToList = function() {
-        $scope.showTable = true;
         $scope.toDetail = false;
-        document.getElementById("placeTable").classList.add("my-switch-animation-reverse");
+        if($scope.placeActive == true) {
+            $scope.showTable = true;           
+            document.getElementById("placeTable").classList.add("my-switch-animation-reverse");
+        } else if($scope.favActive == true) {
+            $scope.showFavoriteTable = true;
+            document.getElementById("favoriteTable").classList.add("my-switch-animation-reverse");
+        }
     };
-
 
 
     $scope.addToFav = function() {
-        // use local storage
-        $scope.addToFavorite = true;
+        var placesAll = "";
+        var favPlacesPackage = "";
+        // if already added to favorite
+        if($scope.addToFavorite == true) {
+
+        } else {
+            $scope.addToFavorite = true;
+            placesAll = localStorage.getItem("placesStorage");
+            if(placesAll == null) {
+                favPlacesPackage = [];
+                favPlacesPackage[0] = $scope.placeDetailInfo;
+            } else {
+                placesAll = JSON.parse(placesAll);
+                placesAll[placesAll.length] = $scope.placeDetailInfo;
+            }    
+            $scope.localPlaces = placesAll;
+            favPlacesPackage = JSON.stringify(placesAll);
+            localStorage.setItem("placesStorage", favPlacesPackage); 
+        }
 
     };
 
 
 
-    
+
 
     $scope.showFavorite = function() {
-        $scope.showFavoriteTable = true;
+        if($scope.localPlaces == null) {
+            $scope.warnAlert = true;
+        } else {
+            $scope.showFavoriteTable = true;
+        }
         $scope.showTable = false;
+        $scope.toDetail = false;   
+        // switch the nav pills
         $scope.favActive = true;
-        $scope.placeActive = false;
-        $scope.toDetail = false;        
-    }
+        $scope.placeActive = false;  
+        document.getElementById("favoriteTable").classList.remove("my-switch-animation-reverse"); 
+
+};
 
     $scope.showPlaceTable = function() {
+        $scope.warnAlert = false;
         $scope.showFavoriteTable = false;
         $scope.showTable = true;
         $scope.favActive = false;
         $scope.placeActive = true;
-        $scope.toDetail = false;               
+        $scope.toDetail = false;
+        document.getElementById("placeTable").classList.remove("my-switch-animation-reverse");   
+
     }
 
 

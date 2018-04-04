@@ -110,7 +110,7 @@
     transition: 0.2s linear;
 }
 
-#pageButton {
+.pageButton {
     text-align: center;
     margin-top: 20px;
     margin-bottom: 50px;
@@ -195,6 +195,12 @@
     height: 500px;
 }
 
+#mapForStreetView {
+    width: 10px;
+    height: 10px;
+    opacity: 0;
+}
+
 #pano {
     height: 500px;
 }
@@ -257,6 +263,5 @@
     left: 0;
     opacity: 1;
 }
-
 
 

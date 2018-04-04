@@ -132,7 +132,7 @@
             </tbody>
         </table>
 
-        <div id="pageButton">        
+        <div class="pageButton">        
             <button id="previousButton" class="btn" type="button" ng-show="previousButton" ng-click=showPreviousPage()>Previous</button>
             <button id="nextButton" class="btn" type="button" ng-show="nextButton" ng-click=showNextPage()>Next</button>
         </div>
@@ -156,24 +156,23 @@
                     <th scope="col">Details</th>
                 </tr> 
             </thead>
-<!--             <tbody>
-                <tr ng-repeat="x in places" class="placeRow" id="{{x.place_id}}">
-                    <th class="align-middle">{{ $index + 1 }}</th>
-                    <td class="align-middle"><img src="{{ x.icon }}"></td>
-                    <td class="align-middle">{{ x.name }}</td>
-                    <td class="align-middle">{{ x.vicinity }}</td>
+            <tbody>
+                <tr ng-repeat="y in localPlaces" class="placeRow" id="{{y.place_id}}">
+                    <th class="align-middle">{{ $indexFav + 1 }}</th>
+                    <td class="align-middle"><img src="{{ y.icon }}"></td>
+                    <td class="align-middle">{{ y.name }}</td>
+                    <td class="align-middle">{{ y.vicinity }}</td>
                     <td class="align-middle"><button id="favoriteIcon" class="btn" type="button"><i class="far fa-star"></i></button></td>
                     <td class="align-middle">
-                        <button id="detailsIcon" class="btn" type="button" ng-click=showDetail(x.place_id,x.geometry.location)><i class="fas fa-angle-right"></i></button>
+                        <button id="detailsIcon" class="btn" type="button" ng-click=showDetail(y.place_id,y.geometry.location)><i class="fas fa-angle-right"></i></button>
                     </td>
                 </tr>            
-            </tbody> -->
+            </tbody>
         </table>
-
-<!--         <div id="pageButton">        
+        <div class="pageButton">        
             <button id="previousButton" class="btn" type="button" ng-show="previousButton" ng-click=showPreviousPage()>Previous</button>
             <button id="nextButton" class="btn" type="button" ng-show="nextButton" ng-click=showNextPage()>Next</button>
-        </div> -->     
+        </div>     
     </div>
 
 
@@ -192,7 +191,7 @@
             <div class="col-10 d-flex justify-content-end">
                 <button id="favoriteButton" class="btn" type="button"
                         ng-class="{addFavorite: addToFavorite}"
-                        ng-click=addToFav()>
+                        ng-click=addToFav(placeDetailInfo)>
                     <i class="far fa-star" ng-class="{fas: addToFavorite}"></i>
                 </button>
                 <button style="padding: 0; margin-left: 10px" class="btn" type="button"
