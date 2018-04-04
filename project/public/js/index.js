@@ -1,7 +1,7 @@
 // define an angular module named myApp
 var myApp = angular.module("myApp", ["ngAnimate"]);
 // create a controller for the module
-myApp.controller("appController", ["$scope", "$http", "$showMap", "$showDirection", 
+myApp.controller("appController", ["$scope", "$http", "$showMap", "$showDirection",
                                     function($scope, $http, $showMap, $showDirection) {
     $scope.keyword = undefined;
     $scope.otherLocation = undefined;
@@ -9,17 +9,21 @@ myApp.controller("appController", ["$scope", "$http", "$showMap", "$showDirectio
     $scope.checkHere = true;
     $scope.checkOther = false;
     $scope.requireKeyword = true;
+    // the search button is disabled before the user location is fetched
+    $scope.isNotFetched = true;
+    // details button is disabled in the beginning
     $scope.isNotTriggered = true;
-    // for animation
-    $scope.switchDetails = false;
+    // switch pills to place table
+    $scope.placeActive = true;
+    $scope.favActive = false;
     // geoLocation without space
     var geoLat = 0.0;
     var geolon = 0.0;
     var otherGeoLat = 0.0;
     var otherGeoLng = 0.0;
+    // global variable for map use
+    var mapToGeoLoc = "";
 
-    // the search button is disabled before the user location is fetched
-    $scope.isNotFetched = true;
     $scope.categories = [
         {name: "Default", value: "default"},
         {name: "Airport", value: "airport"},
@@ -35,9 +39,9 @@ myApp.controller("appController", ["$scope", "$http", "$showMap", "$showDirectio
         {name: "Campground", value: "campground"},
         {name: "Car Rental", value: "car_rental"},
         {name: "Casino", value: "casino"},
+        {name: "Lodging", value: "lodging"},
         {name: "Movie Theater", value: "movie_theater"},
         {name: "Museum", value: "museum"},
-        {name: "Night Club", value: "night_club"},
         {name: "Night Club", value: "night_club"},
         {name: "Park", value: "park"},
         {name: "Parking", value: "parking"},
@@ -68,6 +72,10 @@ myApp.controller("appController", ["$scope", "$http", "$showMap", "$showDirectio
 
 
 
+
+    // How to immediately reset the form, regardless of the animation, 
+    // which can be applied to search button
+
     // reset the form, need to be implemented
     // $scope.clear = function() {
     //     $scope.searchForm.$setUntouched();
@@ -76,7 +84,9 @@ myApp.controller("appController", ["$scope", "$http", "$showMap", "$showDirectio
 
 
 
-    // call the ip-api at the client side????
+
+
+    // fetch the client side geolocation
     $http.get("http://ip-api.com/json")
         .then(function(result) {
             $scope.location = result.data.lat + "," + result.data.lon;
@@ -85,8 +95,6 @@ myApp.controller("appController", ["$scope", "$http", "$showMap", "$showDirectio
             $scope.isNotFetched = false;
     });
     
-
-
     var next_page_token = "";
     // store the result list on the page
     var firstPagePlace = "";
@@ -98,23 +106,11 @@ myApp.controller("appController", ["$scope", "$http", "$showMap", "$showDirectio
     var warnAlertReviewsGoogle = false;
     var warnAlertReviewsYelp = false;
 
-    var mapToGeoLoc = "";
-
     function resetValue() {
         // reset place table: show the progress bar and hide the others
         $scope.progressing = true;
         $scope.warnAlert = false;
-        $scope.warnAlertPhotos = false;
-        warnAlertPhotos = false;
 
-        $scope.warnAlertReviews = false;
-        warnAlertReviews = false;
-        $scope.warnAlertReviewsGoogle = false;
-        warnAlertReviewsGoogle = false;
-        $scope.warnAlertReviewsYelp = false;
-        warnAlertReviewsYelp = false;
-
-        $scope.showTable = false;
         $scope.previousButton = false;
         $scope.nextButton = false;
         next_page_token = "";
@@ -124,14 +120,9 @@ myApp.controller("appController", ["$scope", "$http", "$showMap", "$showDirectio
         // reset detail button
         $scope.isNotTriggered = true;
         // for animation
-        $scope.switchDetails = false;
-        // reset tabs
-        $scope.selectInfo = false;
-        $scope.selectPhotos = false;
-        $scope.selectMap = false;
-        $scope.selectReviews = false;
-        $scope.isWarnAlertMap = false;
-        mapToGeoLoc = "";
+        $scope.showTable = false;
+        $scope.toDetail = false;
+        document.getElementById("placeTable").classList.remove("my-switch-animation-reverse");
     }
 
     $scope.submitForm = function() {
@@ -264,15 +255,39 @@ myApp.controller("appController", ["$scope", "$http", "$showMap", "$showDirectio
     $scope.showDetail = function(place_id, location) {
         // console.log(location);
 
-        // reset the details table
+        // for animation
+        $scope.toDetail = true;
+        $scope.showTable = false;
+
+        // show progressing bar
+        $scope.progressing = true;
+        // reset tabs
+        $scope.selectInfo = false;
+        $scope.selectPhotos = false;
+        $scope.selectMap = false;
+        $scope.selectReviews = false;        
+        // reset the review tab
         $scope.showGoogleReview = false;
         $scope.showYelpReview = false;
 
-        // for animation
-        $scope.showTable = false;
-        $scope.switchDetails = true;
+        $scope.isWarnAlertMap = false;
+        mapToGeoLoc = "";
+
+        $scope.warnAlertPhotos = false;
+        warnAlertPhotos = false;
+
+        $scope.warnAlertReviews = false;
+        warnAlertReviews = false;
+        $scope.warnAlertReviewsGoogle = false;
+        warnAlertReviewsGoogle = false;
+        $scope.warnAlertReviewsYelp = false;
+        warnAlertReviewsYelp = false;
         // enable detail button
         $scope.isNotTriggered = false;
+        // disable twitter button
+        $scope.twitterDisabled = true;
+        $scope.twitterSrc = "javaScript:void(0)";
+
         // set map
         var map = new google.maps.Map(document.getElementById('map'), {
             center: {lat: location.lat, lng: location.lng},
@@ -313,7 +328,26 @@ myApp.controller("appController", ["$scope", "$http", "$showMap", "$showDirectio
         $showMap.fetchDetail(place_id, map)
             .then(
                 function(res) {
+                    // end procressing bar
+                    $scope.progressing = false;
+                    // set the background color of the selected row
+                    var placeRows = document.getElementsByClassName("placeRow");
+                    for(var i = 0; i < placeRows.length; i++) {
+                        placeRows[i].classList.remove("selectedPlaceRow");
+                    }
+                    document.getElementById(place_id).classList.add("selectedPlaceRow");
                     console.log(res);
+                    // set the twitter contents
+                    $scope.twitterDisabled = false;
+                    if(res.website == undefined) {
+                        $scope.twitterSrc = "https://twitter.com/intent/tweet?text=Check out " 
+                                                    + res.name + " located at " + res.formatted_address 
+                                                    + ". Website:&url=" + res.url + "&hashtags=TravelAndEntertainmentSearch";    
+                    } else {
+                        $scope.twitterSrc = "https://twitter.com/intent/tweet?text=Check out " 
+                                                    + res.name + " located at " + res.formatted_address 
+                                                    + ". Website:&url=" + res.website + "&hashtags=TravelAndEntertainmentSearch";
+                    }
                     // fetch data for the info tab
                     $scope.selectInfo = true;
                     $scope.detailName = res.name;
@@ -410,13 +444,13 @@ myApp.controller("appController", ["$scope", "$http", "$showMap", "$showDirectio
                     // console.log(yelpMatchUrl);
                     $http.get(yelpMatchUrl)
                         .then(function(result) {
+                            var yelpReviews = "";
+                            $scope.yelpReviews = "";
                             if(result.data.businesses.length == 1) {
                                 var yelpReviewUrl = "/yelpReview?id=" + result.data.businesses[0].id;
                                 $http.get(yelpReviewUrl)
                                     .then(function(res) {
                                         console.log(res.data.reviews);
-                                        var yelpReviews = "";
-                                        $scope.yelpReviews = "";
                                         if(res.data.reviews != undefined) {
                                             yelpReviews = res.data.reviews;
                                             for(var i = 0; i < yelpReviews.length; i++) {
@@ -444,7 +478,7 @@ myApp.controller("appController", ["$scope", "$http", "$showMap", "$showDirectio
                             }
                         });
 
-                });
+            });       
     };
 
     $scope.showInfo = function() {
@@ -600,6 +634,46 @@ myApp.controller("appController", ["$scope", "$http", "$showMap", "$showDirectio
             $scope.sortButton = "Least Recent";         
         }
     };
+
+    $scope.goToDetail = function() {
+        $scope.showTable = false;
+        $scope.toDetail = true;
+    };
+
+    $scope.goToList = function() {
+        $scope.showTable = true;
+        $scope.toDetail = false;
+        document.getElementById("placeTable").classList.add("my-switch-animation-reverse");
+    };
+
+
+
+    $scope.addToFav = function() {
+        // use local storage
+        $scope.addToFavorite = true;
+
+    };
+
+
+
+    
+
+    $scope.showFavorite = function() {
+        $scope.showFavoriteTable = true;
+        $scope.showTable = false;
+        $scope.favActive = true;
+        $scope.placeActive = false;
+        $scope.toDetail = false;        
+    }
+
+    $scope.showPlaceTable = function() {
+        $scope.showFavoriteTable = false;
+        $scope.showTable = true;
+        $scope.favActive = false;
+        $scope.placeActive = true;
+        $scope.toDetail = false;               
+    }
+
 
 }]);
 

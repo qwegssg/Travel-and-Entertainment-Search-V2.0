@@ -1,5 +1,4 @@
 var express = require("express");
-var bodyParser = require("body-parser");
 var https = require("https");
 var app = express();
 
@@ -13,7 +12,7 @@ app.get("/search", function(req, res) {
     // the value from client side is string type
     if(req.query.otherLocation != "undefined") {
         var urlOfMap = "https://maps.googleapis.com/maps/api/geocode/json?address=" 
-                        + req.query.otherLocation + "&key=AIzaSyCAOh4hsHZ7zKU-71Jn7yql0LcrsA_iVEM";
+                        + req.query.otherLocation + "&key=AIzaSyDhC1Tha8FKORJfe7--SYluRWe_n1LVMoE";
         // with https.get, req & req.end is automatically set.
         https.get(urlOfMap, function(response) {
             response.on("data", function(data) {
@@ -47,11 +46,11 @@ app.get("/search", function(req, res) {
         if(type == "default") {
             urlOfPlace = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=" 
                         + location + "&radius=" + radius + "&keyword=" 
-                        + keyword + "&key=AIzaSyCAOh4hsHZ7zKU-71Jn7yql0LcrsA_iVEM";
+                        + keyword + "&key=AIzaSyDhC1Tha8FKORJfe7--SYluRWe_n1LVMoE";
         } else {
             urlOfPlace = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=" 
                         + location + "&radius=" + radius + "&type=" + type + "&keyword=" 
-                        + keyword + "&key=AIzaSyCAOh4hsHZ7zKU-71Jn7yql0LcrsA_iVEM";
+                        + keyword + "&key=AIzaSyDhC1Tha8FKORJfe7--SYluRWe_n1LVMoE";
         }
 
         https.get(urlOfPlace, function(response) {
@@ -72,7 +71,7 @@ app.get("/next", function(req, res) {
     var next_page_token = req.query.next_page_token;
     var responseData = "";
     var nextPageUrl = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?pagetoken=" 
-                        + next_page_token + "&key=AIzaSyCAOh4hsHZ7zKU-71Jn7yql0LcrsA_iVEM";
+                        + next_page_token + "&key=AIzaSyDhC1Tha8FKORJfe7--SYluRWe_n1LVMoE";
     https.get(nextPageUrl, function(response) {
         response.on("data", function(data) {
             // JSON format
