@@ -2,6 +2,7 @@
 <html ng-app="myApp" ng-controller="appController">
 <head>
     <title>Travel and Entertainment Search</title>
+    <!-- load css file -->
     <link rel="stylesheet" type="text/css" href="./css/index.css">
     <!-- load bootstrap via CDN -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
@@ -123,13 +124,13 @@
             <tbody>
                 <tr ng-repeat="x in places" class="placeRow" id="{{x.place_id}}">
                     <th class="align-middle">{{ $index + 1 }}</th>
-                    <td class="align-middle"><img src="{{ x.icon }}"></td>
+                    <td class="align-middle"><img ng-src="{{ x.icon }}"></td>
                     <td class="align-middle">{{ x.name }}</td>
                     <td class="align-middle">{{ x.vicinity }}</td>
                     <td class="align-middle">
                         <button id="favoriteIcon" class="btn" type="button" 
                                 ng-click=addToFavinList(x)>
-                            <i id="{{x.place_id + 'favoriteIcon'}}" class="far fa-star"
+                            <i class="far fa-star"
                                 ng-class="{fas:favList.indexOf(x.place_id)!=-1,
                                         addFavorite:favList.indexOf(x.place_id)!=-1}">
                             </i>
@@ -166,7 +167,7 @@
             <tbody>
                 <tr ng-repeat="y in localPlaces" class="placeRow" id="{{y.place_id + 'fav'}}">
                     <th class="align-middle">{{ $indexFav + 1 }}</th>
-                    <td class="align-middle"><img src="{{ y.icon }}"></td>
+                    <td class="align-middle"><img ng-src="{{ y.icon }}"></td>
                     <td class="align-middle">{{ y.name }}</td>
                     <td class="align-middle">{{ y.vicinity }}</td>
                     <td class="align-middle"><button id="deleteIcon" class="btn" type="button" ng-click=deleteFav(y.place_id)><i class="fas fa-trash-alt"></i></button></td>
@@ -208,7 +209,7 @@
          
         </div>
         <!-- bootstrap flex -->
-        <ul class="nav nav-tabs d-flex justify-content-end">
+        <ul style="margin-top:10px" class="nav nav-tabs d-flex justify-content-end">
             <li class="nav-item">
                 <a class="nav-link" href="javaScript:void(0)" ng-class="{active: selectInfo}" ng-click=showInfo()>Info</a>
             </li>
@@ -295,7 +296,7 @@
             <div id="detailPhotos" class="card-columns">
                 <div class="card p-1" ng-repeat="url in photoUrl">
                     <a target="_blank" href="{{url}}">
-                        <img class="card-img" src={{url}}>
+                        <img class="card-img" ng-src={{url}}>
                     </a>
                 </div>
             </div>
@@ -340,7 +341,7 @@
                 </div>
             </form>
             <div>
-                <button id="pegmanButton" class="btn" ng-click=showStreetView()><img id="pegman" class="rounded" src={{streetViewIcon}}></button>
+                <button id="pegmanButton" class="btn" ng-click=showStreetView()><img id="pegman" class="rounded" ng-src={{streetViewIcon}}></button>
             </div>
             <!-- NOT_FOUND alert -->
             <div id="warnAlertMap" class="alert alert-danger" role="alert" ng-show="warnAlertMap">
@@ -387,7 +388,8 @@
                     ng-if="showGoogleReview">
                 <div style="text-align:center;padding:0" class="col-1">
                     <a target="_blank" href="{{review.author_url}}">                    
-                        <img width="50" style="padding:0" src="{{review.profile_photo_url}}" >
+                        <img width="50" style="padding:0" 
+                            ng-src="{{review.profile_photo_url}}">
                     </a>
                 </div>
                 <div style="padding-left:0;padding-right:10px" class="col-11">
@@ -407,7 +409,8 @@
                     ng-if="showYelpReview">
                 <div style="text-align:center;padding:0" class="col-1">
                     <a target="_blank" href="{{yelpReview.url}}">
-                        <img class="rounded-circle" width="50" height="50" style="padding:0" src="{{yelpReview.user.image_url}}" >                        
+                        <img class="rounded-circle" width="50" height="50" style="padding:0" 
+                                ng-src="{{yelpReview.user.image_url}}" >                        
                     </a>
                 </div>
                 <div style="padding-left:0;padding-right:10px" class="col-11">

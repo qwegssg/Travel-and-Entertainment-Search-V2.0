@@ -75,9 +75,7 @@ myApp.controller("appController", ["$scope", "$http", "$showMap", "$showDirectio
         $scope.favList = [];
         for(var i = 0; i < $scope.localPlaces.length; i++) {
             $scope.favList[i] = $scope.localPlaces[i].place_id;
-            // console.log($scope.favList);
         }
-
     }
 
     $scope.enableHere = function() {
@@ -182,7 +180,6 @@ myApp.controller("appController", ["$scope", "$http", "$showMap", "$showDirectio
         var url = "/search?keyword=" + $scope.keyword + "&category=" + $scope.selectedType.value 
                     + "&distance=" + $scope.distance + "&geoLocation=" + $scope.location
                     + "&otherLocation=" + encodeURI(otherLocation);
-        // console.log(url);
         $http.get(url)
         .then(function(result) {
             var result = result.data;
@@ -204,16 +201,6 @@ myApp.controller("appController", ["$scope", "$http", "$showMap", "$showDirectio
                     $scope.showTable = true;
                     result = result.data;
                     $scope.places = result.results;
-
-                    // // add the favorite icon to the favorite items
-                    // if(placesStorageAll != null) {
-                    //     addFavoritePlace = localStorage.getItem("placesStorage");
-                    //     addFavoritePlace = JSON.parse(addFavoritePlace);
-                    //     for(var i = 0; i < addFavoritePlace.length; i++) {
-                    //         console.log(document.getElementById(addFavoritePlace[i].place_id));
-                    //     }                       
-                    // }
-
                     firstPagePlace = $scope.places;
                     next_page_token = result.next_page_token;
                     nextPageCheck(next_page_token);                
@@ -223,26 +210,6 @@ myApp.controller("appController", ["$scope", "$http", "$showMap", "$showDirectio
                 $scope.progressing = false;
                 $scope.showTable = true;
                 $scope.places = result.results;
-
-
-
-                //  console.log("Here1");
-                // // add the favorite icon to the favorite items
-                // if(placesStorageAll != null) {
-                //     addFavoritePlace = localStorage.getItem("placesStorage");
-                //     addFavoritePlace = JSON.parse(addFavoritePlace);
-                //     for(var i = 0; i < addFavoritePlace.length; i++) {
-                //         console.log("Here2");
-                //         console.log(addFavoritePlace[i].place_id);
-                //         if(document.getElementById(addFavoritePlace[i].place_id) != null) {
-                //             console.log("Here3");
-                //             document.getElementById(addFavoritePlace[i].place_id + "favoriteIcon").classList.add("fas");
-                //             document.getElementById(addFavoritePlace[i].place_id + "favoriteIcon").classList.add("addFavorite");
-                //         }
-                //     }                       
-                // }
-
-                // console.log($scope.places);
                 firstPagePlace = $scope.places;
                 next_page_token = result.next_page_token;
                 nextPageCheck(next_page_token);
@@ -326,8 +293,6 @@ myApp.controller("appController", ["$scope", "$http", "$showMap", "$showDirectio
     var marker = "";
 
     $scope.showDetail = function(place_id, location) {
-        // console.log(location);
-
         // for animation
         $scope.toDetail = true;
         $scope.showTable = false;
@@ -404,7 +369,7 @@ myApp.controller("appController", ["$scope", "$http", "$showMap", "$showDirectio
         $showMap.fetchDetail(place_id, map)
             .then(
                 function(res) {
-                    console.log(res);
+                    // console.log(res);
                     $scope.placeDetailInfo = res;
 
                     // end procressing bar
@@ -454,7 +419,6 @@ myApp.controller("appController", ["$scope", "$http", "$showMap", "$showDirectio
                     }
                     $scope.rating = res.rating;
                     $scope.starWidth = Math.round($scope.rating / 5.0 * 100) + "%";
-                    // console.log($scope.starWidth);
                     $scope.googlePage = res.url;
                     $scope.website = res.website;
                     // implement opening hours
@@ -471,17 +435,20 @@ myApp.controller("appController", ["$scope", "$http", "$showMap", "$showDirectio
                         $scope.todayWeek = today.slice(0, today.indexOf(":"));
                         $scope.todayHour = today.slice(today.indexOf(":") + 2);
                         $scope.otherDays = [];
+                        var counter = 0;
                         for(var m = todayWeekIndex + 1; m < res.opening_hours.weekday_text.length; m++) {
-                            $scope.otherDays[m - 1] = {"week": res.opening_hours.weekday_text[m].slice(0, 
+                            $scope.otherDays[counter] = {"week": res.opening_hours.weekday_text[m].slice(0, 
                                                         res.opening_hours.weekday_text[m].indexOf(":")),
                                                     "hour": res.opening_hours.weekday_text[m].slice(
                                                         res.opening_hours.weekday_text[m].indexOf(":") + 2)};
+                            counter++;
                         }
                         for(var n = 0; n < todayWeekIndex; n++) {
-                            $scope.otherDays[n] = {"week": res.opening_hours.weekday_text[n].slice(0, 
+                            $scope.otherDays[counter] = {"week": res.opening_hours.weekday_text[n].slice(0, 
                                                     res.opening_hours.weekday_text[n].indexOf(":")),
                                                     "hour": res.opening_hours.weekday_text[n].slice(
-                                                        res.opening_hours.weekday_text[n].indexOf(":") + 2)};   
+                                                        res.opening_hours.weekday_text[n].indexOf(":") + 2)};
+                            counter++;
                         }
                         $scope.hours = "";
                         if(res.opening_hours.open_now == false) {
@@ -508,7 +475,6 @@ myApp.controller("appController", ["$scope", "$http", "$showMap", "$showDirectio
                     var reviews = "";
                     $scope.reviews = "";
                     reviews = res.reviews;
-                    // console.log(reviews);
                     if(reviews == undefined) {
                         warnAlertReviews = true;
                         warnAlertReviewsGoogle = true;
@@ -539,7 +505,6 @@ myApp.controller("appController", ["$scope", "$http", "$showMap", "$showDirectio
                             // add index in order to remember the default sort
                             reviews[m]["index"] = m;
                         }
-                        console.log(reviews);
                         $scope.reviews = reviews;
                         $scope.showGoogleReview = true;
                         $scope.reviewButton = "Google Reviews";
@@ -568,12 +533,15 @@ myApp.controller("appController", ["$scope", "$http", "$showMap", "$showDirectio
                         yelpMatchUrl = "/yelpSearch?name=" + res.name + "&city=" + cityName 
                                 + "&state=" + stateName + "&country=US&address1=" + res.formatted_address;                        
                     }
-                    // console.log(yelpMatchUrl);
                     $http.get(yelpMatchUrl)
                         .then(function(result) {
                             var yelpReviews = "";
                             $scope.yelpReviews = "";
-                            if(result.data.businesses.length == 1) {
+                            // if no best match, which means no reviews
+                            if(result.data.businesses == undefined || result.data.businesses.length == 0) {
+                                warnAlertReviews = true;
+                                warnAlertReviewsYelp = true;
+                            } else {
                                 var yelpReviewUrl = "/yelpReview?id=" + result.data.businesses[0].id;
                                 $http.get(yelpReviewUrl)
                                     .then(function(res) {
@@ -594,11 +562,7 @@ myApp.controller("appController", ["$scope", "$http", "$showMap", "$showDirectio
                                             warnAlertReviews = true;
                                             warnAlertReviewsYelp = true;
                                         }
-                                    });
-                            } else {
-                                // no best match, which means no reviews
-                                warnAlertReviews = true;
-                                warnAlertReviewsYelp = true;
+                                    }); 
                             }
                         });
 
@@ -769,6 +733,11 @@ myApp.controller("appController", ["$scope", "$http", "$showMap", "$showDirectio
         $scope.showTable = false;
         $scope.showFavoriteTable = false;
         $scope.toDetail = true;
+        if($scope.favList.indexOf($scope.placeDetailInfo.place_id) == -1) {
+            $scope.addToFavorite = false;
+        } else {
+            $scope.addToFavorite = true;
+        }
     };
 
     $scope.goToList = function() {
@@ -779,14 +748,11 @@ myApp.controller("appController", ["$scope", "$http", "$showMap", "$showDirectio
         } else if($scope.favActive == true) {
             if($scope.localPlaces.length == 0) {
                 $scope.warnAlert = true;
+                document.getElementById("warnAlert").classList.add("my-switch-animation-reverse");
             } else {
                 $scope.showFavoriteTable = true;
                 document.getElementById("favoriteTable").classList.add("my-switch-animation-reverse");       
             }
-        }
-        if($scope.addToFavorite == true) {
-            document.getElementById($scope.placeDetailInfo.place_id + "favoriteIcon").classList.add("fas");
-            document.getElementById($scope.placeDetailInfo.place_id + "favoriteIcon").classList.add("addFavorite");
         }
     };
 
@@ -805,6 +771,12 @@ myApp.controller("appController", ["$scope", "$http", "$showMap", "$showDirectio
                     localStorage.setItem("placesStorage", placesAll); 
                 }
             }
+            // add to favorite list
+            for(var j = 0; j < $scope.favList.length; j++) {
+                if($scope.favList[j] == $scope.placeDetailInfo.place_id) {
+                    $scope.favList.splice(j, 1);
+                }
+            }
         } else {
             $scope.addToFavorite = true;
             placesAll = localStorage.getItem("placesStorage");
@@ -814,7 +786,9 @@ myApp.controller("appController", ["$scope", "$http", "$showMap", "$showDirectio
             } else {
                 placesAll = JSON.parse(placesAll);
                 placesAll[placesAll.length] = $scope.placeDetailInfo;
-            }    
+            }   
+            // delete from favorite list 
+            $scope.favList[$scope.favList.length] = $scope.placeDetailInfo.place_id;
             $scope.localPlaces = placesAll;
             placesAll = JSON.stringify(placesAll);
             localStorage.setItem("placesStorage", placesAll); 
@@ -832,6 +806,7 @@ myApp.controller("appController", ["$scope", "$http", "$showMap", "$showDirectio
                 localStorage.setItem("placesStorage", placesAll); 
             }
         }
+        // delete from favorite list
         for(var j = 0; j < $scope.favList.length; j++) {
             if($scope.favList[j] == the_place_id) {
                 $scope.favList.splice(j, 1);
@@ -844,8 +819,6 @@ myApp.controller("appController", ["$scope", "$http", "$showMap", "$showDirectio
     };
 
     $scope.addToFavinList = function(placeInfo) {
-        // document.getElementById(the_place_id + "favoriteIcon").classList.add("fas");
-        // document.getElementById(the_place_id + "favoriteIcon").classList.add("addFavorite");
         var placesAll = localStorage.getItem("placesStorage");
         // if the place is not in the favorite list
         if($scope.favList.indexOf(placeInfo.place_id) == -1) {
@@ -875,9 +848,10 @@ myApp.controller("appController", ["$scope", "$http", "$showMap", "$showDirectio
             }
         }
     };
-    
+
     $scope.showFavorite = function() {
         if($scope.localPlaces == null || $scope.localPlaces.length == 0) {
+            document.getElementById("warnAlert").classList.remove("my-switch-animation-reverse"); 
             $scope.warnAlert = true;
         } else {
             $scope.showFavoriteTable = true;
@@ -888,10 +862,9 @@ myApp.controller("appController", ["$scope", "$http", "$showMap", "$showDirectio
         $scope.favActive = true;
         $scope.placeActive = false;  
         document.getElementById("favoriteTable").classList.remove("my-switch-animation-reverse"); 
-        if($scope.placeDetailInfo != undefined && $scope.addToFavorite == true) {
+        if($scope.placeDetailInfo != undefined && $scope.favList.indexOf($scope.placeDetailInfo.place_id) != -1) {
             if($scope.localPlaces.length != 0) {
-                document.getElementById($scope.placeDetailInfo.place_id + "fav").classList.add("selectedPlaceRow");           
-                // document.getElementById($scope.placeDetailInfo.place_id).classList.add("selectedPlaceRow");                     
+                document.getElementById($scope.placeDetailInfo.place_id + "fav").classList.add("selectedPlaceRow");                  
             }
       
         }
@@ -907,7 +880,7 @@ myApp.controller("appController", ["$scope", "$http", "$showMap", "$showDirectio
         $scope.placeActive = true;
         $scope.toDetail = false;
         document.getElementById("placeTable").classList.remove("my-switch-animation-reverse");
-    }
+    };
 
 
 }]);
