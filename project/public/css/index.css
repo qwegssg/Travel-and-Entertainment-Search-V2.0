@@ -92,6 +92,11 @@
     border: 1px solid #cccccc;
 }
 
+#deleteIcon {
+    background-color: white;
+    border: 1px solid #cccccc;    
+}
+
 #favoriteIcon:hover {
     background-color: #efefef;
     transition: 0.1s linear;
@@ -103,6 +108,14 @@
     border: 1px solid #cccccc;
     color: black;
     background-color: white;
+}
+
+#detailsIconFav {
+    width: 40px;
+    height: 40px;
+    border: 1px solid #cccccc;
+    color: black;
+    background-color: white;    
 }
 
 #detailsIcon:hover {
@@ -264,4 +277,33 @@
     opacity: 1;
 }
 
+@media (min-width: 200px) {
+.card-columns {
+    -webkit-column-count: 4;
+    -moz-column-count: 4;
+    column-count: 4;
+    -webkit-column-gap: 1.25rem;
+    -moz-column-gap: 1.25rem;
+    column-gap: 1.25rem;
+}
 
+/* clearfix */
+/*.grid:after {
+  content: '';
+  display: block;
+  clear: both;
+}*/
+.grid-item {    
+    width: 220px; 
+    float: left;
+}
+
+/*.grid-item:before {
+  counter-increment: grid-item;
+  content: counter(grid-item);
+  display: block;
+  color: white;
+  padding-top: 0.2em;
+  text-align: center;
+  font-size: 1.4rem;
+}*/

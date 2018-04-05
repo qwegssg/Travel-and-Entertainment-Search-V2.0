@@ -7,6 +7,8 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
     <!-- load Font Awesome via CDN -->
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.9/css/all.css" integrity="sha384-5SOiIsAziJl6AWe0HWRKTXlfcSHKmYV4RBF18PPJ173Kzn7jzMyFuTtk8JA7QQG1" crossorigin="anonymous">
+    <!-- responsive design: set the viewport -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
 <body>
 
@@ -72,7 +74,7 @@
         </div>
 
         <button id="search" class="btn btn-primary" type="submit" 
-                ng-disabled="searchForm.keyword.$invalid || isNotFetched">
+                ng-disabled="searchForm.keyword.$invalid || searchForm.otherLocation.$invalid || isNotFetched">
                 <i class="fas fa-search"></i> 
                 Search
         </button>
@@ -124,7 +126,9 @@
                     <td class="align-middle"><img src="{{ x.icon }}"></td>
                     <td class="align-middle">{{ x.name }}</td>
                     <td class="align-middle">{{ x.vicinity }}</td>
-                    <td class="align-middle"><button id="favoriteIcon" class="btn" type="button"><i class="far fa-star"></i></button></td>
+                    <td class="align-middle"><button id="favoriteIcon" class="btn" type="button" ng-click=addToFavinList(x.place_id)>
+                        <i id="{{x.place_id + 'favoriteIcon'}}" class="far fa-star">
+                        </i></button></td>
                     <td class="align-middle">
                         <button id="detailsIcon" class="btn" type="button" ng-click=showDetail(x.place_id,x.geometry.location)><i class="fas fa-angle-right"></i></button>
                     </td>
@@ -137,9 +141,6 @@
             <button id="nextButton" class="btn" type="button" ng-show="nextButton" ng-click=showNextPage()>Next</button>
         </div>
     </div>
-
-
-
 
     <!-- favorite table -->
     <div id="favoriteTable" ng-show="showFavoriteTable" class="container">
@@ -157,27 +158,23 @@
                 </tr> 
             </thead>
             <tbody>
-                <tr ng-repeat="y in localPlaces" class="placeRow" id="{{y.place_id}}">
+                <tr ng-repeat="y in localPlaces" class="placeRow" id="{{y.place_id + 'fav'}}">
                     <th class="align-middle">{{ $indexFav + 1 }}</th>
                     <td class="align-middle"><img src="{{ y.icon }}"></td>
                     <td class="align-middle">{{ y.name }}</td>
                     <td class="align-middle">{{ y.vicinity }}</td>
-                    <td class="align-middle"><button id="favoriteIcon" class="btn" type="button"><i class="far fa-star"></i></button></td>
+                    <td class="align-middle"><button id="deleteIcon" class="btn" type="button" ng-click=deleteFav(y.place_id)><i class="fas fa-trash-alt"></i></button></td>
                     <td class="align-middle">
-                        <button id="detailsIcon" class="btn" type="button" ng-click=showDetail(y.place_id,y.geometry.location)><i class="fas fa-angle-right"></i></button>
+                        <button id="detailsIconFav" class="btn" type="button" ng-click=showDetail(y.place_id,y.geometry.location)><i class="fas fa-angle-right"></i></button>
                     </td>
                 </tr>            
             </tbody>
         </table>
-        <div class="pageButton">        
+<!--         <div class="pageButton">        
             <button id="previousButton" class="btn" type="button" ng-show="previousButton" ng-click=showPreviousPage()>Previous</button>
             <button id="nextButton" class="btn" type="button" ng-show="nextButton" ng-click=showNextPage()>Next</button>
-        </div>     
+        </div>    -->  
     </div>
-
-
-
-
 
 
     <!-- Details Table -->
@@ -191,7 +188,7 @@
             <div class="col-10 d-flex justify-content-end">
                 <button id="favoriteButton" class="btn" type="button"
                         ng-class="{addFavorite: addToFavorite}"
-                        ng-click=addToFav(placeDetailInfo)>
+                        ng-click=addToFav()>
                     <i class="far fa-star" ng-class="{fas: addToFavorite}"></i>
                 </button>
                 <button style="padding: 0; margin-left: 10px" class="btn" type="button"
@@ -251,16 +248,58 @@
             </tr>
             <tr scope="row" class="row" ng-if="hours != undefined">
                 <th class="col-2">Hours</th>
-                <td class="col-10">{{hours}}</td>
+                <td class="col-10">{{hours}}&nbsp;&nbsp;&nbsp;&nbsp;
+                    <a href="javaScript:void(0)" data-toggle="modal" data-target="#myModal">Daily open hours
+                    </a>
+                </td>
             </tr>
         </table>
 
-        <div id="photosTap"  style="margin-top: 20px; margin-bottom: 50px" ng-show="selectPhotos">
-            <div id="detailPhotos" class="card-columns">
-                <div class="card" ng-repeat="url in photoUrl">
-                    <img class="card-img-top" src={{url}} alt="Card image cap" >
+        <div id="myModal" class="modal fade" role="dialog">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 style="float:left" class="modal-title">Open hours</h4>
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    </div>
+                    <div class="modal-body">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th scope="col">{{todayWeek}}</th>
+                                    <th scope="col">{{todayHour}}</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="day in otherDays">
+                                    <td>{{day.week}}</td>
+                                    <td>{{day.hour}}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    </div>
                 </div>
             </div>
+        </div>
+
+        <div id="photosTap"  style="margin-top: 20px; margin-bottom: 50px" ng-show="selectPhotos">
+            <div id="detailPhotos" class="card-columns">
+                <div class="card p-1" ng-repeat="url in photoUrl">
+                    <a target="_blank" href="{{url}}">
+                        <img class="card-img" src={{url}}>
+                    </a>
+                </div>
+            </div>
+<!--             <div id="detailPhotos" class="grid">
+                <div class="grid-item" ng-repeat="url in photoUrl">
+                    <a target="_blank" href="{{url}}">
+                        <img class="card-img" src={{url}}>
+                    </a>
+                </div>
+            </div> -->
         </div>
 
         <div id="warnAlertPhotos" class="alert alert-warning" role="alert" ng-show="warnAlertPhotos">
@@ -380,11 +419,8 @@
     </div>
 
 
-  
-
-
-
-
+    <!-- load moment.js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.22.0/moment.min.js"></script>
     <!-- load Twitter for Websites JavaScript -->
     <script type="text/javascript" async src="https://platform.twitter.com/widgets.js"></script>
     <!-- load jQuery, Popper.js, and our Bootstrap JavaScript plugins. -->
@@ -397,6 +433,7 @@
      <!-- client-side library: loads all of the main JavaScript objects and symbols for use in the Maps JavaScript API.  -->
     <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDhC1Tha8FKORJfe7--SYluRWe_n1LVMoE&libraries=places"></script>
     <script src="./js/index.js"></script>
+    <script src="./js/function.js"></script>
 <!--     <script src="./js/function.js"></script> -->
 </body>
 </html>
