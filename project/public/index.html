@@ -126,9 +126,15 @@
                     <td class="align-middle"><img src="{{ x.icon }}"></td>
                     <td class="align-middle">{{ x.name }}</td>
                     <td class="align-middle">{{ x.vicinity }}</td>
-                    <td class="align-middle"><button id="favoriteIcon" class="btn" type="button" ng-click=addToFavinList(x.place_id)>
-                        <i id="{{x.place_id + 'favoriteIcon'}}" class="far fa-star">
-                        </i></button></td>
+                    <td class="align-middle">
+                        <button id="favoriteIcon" class="btn" type="button" 
+                                ng-click=addToFavinList(x)>
+                            <i id="{{x.place_id + 'favoriteIcon'}}" class="far fa-star"
+                                ng-class="{fas:favList.indexOf(x.place_id)!=-1,
+                                        addFavorite:favList.indexOf(x.place_id)!=-1}">
+                            </i>
+                        </button>
+                    </td>
                     <td class="align-middle">
                         <button id="detailsIcon" class="btn" type="button" ng-click=showDetail(x.place_id,x.geometry.location)><i class="fas fa-angle-right"></i></button>
                     </td>

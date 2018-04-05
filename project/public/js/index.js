@@ -63,6 +63,7 @@ myApp.controller("appController", ["$scope", "$http", "$showMap", "$showDirectio
 
     // localStorage.removeItem("placesStorage");
     $scope.localPlaces = [];
+    $scope.favList = [];
     var placesStorageAll = localStorage.getItem("placesStorage");
     placesStorageAll = JSON.parse(placesStorageAll);
     // if the favorite items are deleted to empty
@@ -71,6 +72,12 @@ myApp.controller("appController", ["$scope", "$http", "$showMap", "$showDirectio
     }
     if(placesStorageAll != null) {
         $scope.localPlaces = placesStorageAll;
+        $scope.favList = [];
+        for(var i = 0; i < $scope.localPlaces.length; i++) {
+            $scope.favList[i] = $scope.localPlaces[i].place_id;
+            // console.log($scope.favList);
+        }
+
     }
 
     $scope.enableHere = function() {
@@ -815,8 +822,7 @@ myApp.controller("appController", ["$scope", "$http", "$showMap", "$showDirectio
     };
 
     $scope.deleteFav = function(the_place_id) {
-        var placesAll = "";
-        placesAll = localStorage.getItem("placesStorage");            
+        var placesAll = localStorage.getItem("placesStorage");            
         placesAll = JSON.parse(placesAll);
         for(var i = 0; i < placesAll.length; i++) {
             if(placesAll[i].place_id == the_place_id) {
@@ -826,24 +832,51 @@ myApp.controller("appController", ["$scope", "$http", "$showMap", "$showDirectio
                 localStorage.setItem("placesStorage", placesAll); 
             }
         }
+        for(var j = 0; j < $scope.favList.length; j++) {
+            if($scope.favList[j] == the_place_id) {
+                $scope.favList.splice(j, 1);
+            }
+        }
         if($scope.localPlaces.length == 0) {
             $scope.warnAlert = true;
             $scope.showFavoriteTable = false;
         } 
     };
 
-    $scope.addToFavinList = function(the_place_id) {
-        document.getElementById(the_place_id + "favoriteIcon").classList.add("fas");
-        document.getElementById(the_place_id + "favoriteIcon").classList.add("addFavorite");
-
-    }
-
-
-
-
-
+    $scope.addToFavinList = function(placeInfo) {
+        // document.getElementById(the_place_id + "favoriteIcon").classList.add("fas");
+        // document.getElementById(the_place_id + "favoriteIcon").classList.add("addFavorite");
+        var placesAll = localStorage.getItem("placesStorage");
+        // if the place is not in the favorite list
+        if($scope.favList.indexOf(placeInfo.place_id) == -1) {
+            $scope.favList[$scope.favList.length] = placeInfo.place_id;
+            if($scope.localPlaces.length == 0) {
+                placesAll = [];
+                placesAll[0] = placeInfo;
+            } else {
+                placesAll = JSON.parse(placesAll);
+                placesAll[placesAll.length] = placeInfo;
+            }    
+            $scope.localPlaces = placesAll;
+            placesAll = JSON.stringify(placesAll);
+            localStorage.setItem("placesStorage", placesAll); 
+        } 
+        // if the place is already in the favorite list
+        else {
+            $scope.favList.splice($scope.favList.indexOf(placeInfo.place_id), 1);          
+            placesAll = JSON.parse(placesAll);
+            for(var i = 0; i < placesAll.length; i++) {
+                if(placesAll[i].place_id == placeInfo.place_id) {
+                    placesAll.splice(i, 1);
+                    $scope.localPlaces = placesAll;
+                    placesAll = JSON.stringify(placesAll);
+                    localStorage.setItem("placesStorage", placesAll); 
+                }
+            }
+        }
+    };
+    
     $scope.showFavorite = function() {
-        console.log($scope.localPlaces);
         if($scope.localPlaces == null || $scope.localPlaces.length == 0) {
             $scope.warnAlert = true;
         } else {
