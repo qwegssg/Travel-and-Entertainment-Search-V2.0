@@ -751,7 +751,12 @@ myApp.controller("appController", ["$scope", "$http", "$showMap", "$showDirectio
                 document.getElementById("warnAlert").classList.add("my-switch-animation-reverse");
             } else {
                 $scope.showFavoriteTable = true;
-                document.getElementById("favoriteTable").classList.add("my-switch-animation-reverse");       
+                document.getElementById("favoriteTable").classList.add("my-switch-animation-reverse");
+                if($scope.placeDetailInfo != undefined && $scope.favList.indexOf($scope.placeDetailInfo.place_id) != -1) {
+                    if($scope.localPlaces.length != 0) {
+                        document.getElementById($scope.placeDetailInfo.place_id + "fav").classList.add("selectedPlaceRow");                  
+                    }
+                }
             }
         }
     };
@@ -866,7 +871,6 @@ myApp.controller("appController", ["$scope", "$http", "$showMap", "$showDirectio
             if($scope.localPlaces.length != 0) {
                 document.getElementById($scope.placeDetailInfo.place_id + "fav").classList.add("selectedPlaceRow");                  
             }
-      
         }
     };
 
