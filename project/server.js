@@ -128,8 +128,10 @@ app.get("/yelpReview", function(req, res) {
 });
 
 
-app.listen(5000, function () {
-  console.log('server is listening at port 5000');
+const PORT = process.env.PORT || 8080;
+app.listen(PORT, () => {
+  console.log(`App listening on port ${PORT}`);
+  console.log('Press Ctrl+C to quit.');
 });
 
 // export the app instance as a module so that it can be included in other files
