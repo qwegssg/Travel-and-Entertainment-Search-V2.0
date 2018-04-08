@@ -60,7 +60,6 @@ myApp.controller("appController", ["$scope", "$http", "$showMap", "$showDirectio
     // set the default category value
     $scope.selectedType = $scope.categories[0];
 
-
     // localStorage.removeItem("placesStorage");
     $scope.localPlaces = [];
     $scope.favList = [];
@@ -177,7 +176,7 @@ myApp.controller("appController", ["$scope", "$http", "$showMap", "$showDirectio
         if($scope.checkOther == false) {
             otherLocation = undefined;
         }
-        var url = "/search?keyword=" + $scope.keyword + "&category=" + $scope.selectedType.value 
+        var url = "http://nodejsyutaoren.us-east-2.elasticbeanstalk.com/search?keyword=" + $scope.keyword + "&category=" + $scope.selectedType.value 
                     + "&distance=" + $scope.distance + "&geoLocation=" + $scope.location
                     + "&otherLocation=" + encodeURI(otherLocation);
         $http.get(url)
@@ -192,20 +191,24 @@ myApp.controller("appController", ["$scope", "$http", "$showMap", "$showDirectio
                 otherGeoLat = result.lat;
                 otherGeoLng = result.lng;
                 var otherLocation = undefined;
-                url = "/search?keyword=" + $scope.keyword + "&category=" + $scope.selectedType.value 
+                url = "http://nodejsyutaoren.us-east-2.elasticbeanstalk.com/search?keyword=" + $scope.keyword + "&category=" + $scope.selectedType.value 
                     + "&distance=" + $scope.distance + "&geoLocation=" + geoLocation
                     + "&otherLocation=" + otherLocation;
                 $http.get(url)
                 .then(function(result) {
                     $scope.progressing = false;
-                    $scope.showTable = true;
                     result = result.data;
-                    $scope.places = result.results;
-                    firstPagePlace = $scope.places;
-                    next_page_token = result.next_page_token;
-                    nextPageCheck(next_page_token);                
+                    if(result.status == "ZERO_RESULTS") {
+                        $scope.warnAlert = true;
+                    } else {
+                        $scope.showTable = true;
+                        $scope.places = result.results;
+                        firstPagePlace = $scope.places;
+                        next_page_token = result.next_page_token;
+                        nextPageCheck(next_page_token);                          
+                    }   
                 });
-            } 
+            }
             else {
                 $scope.progressing = false;
                 $scope.showTable = true;
@@ -241,7 +244,7 @@ myApp.controller("appController", ["$scope", "$http", "$showMap", "$showDirectio
     $scope.showNextPage = function() {
         // if second page's result has not been fetched
         if(secondPagePlace == "") {
-            var nextPageUrl = "/next?next_page_token=" + next_page_token;
+            var nextPageUrl = "http://nodejsyutaoren.us-east-2.elasticbeanstalk.com/next?next_page_token=" + next_page_token;
             $http.get(nextPageUrl)
             .then(function(result) {
                 $scope.nextButton = false;
@@ -259,7 +262,7 @@ myApp.controller("appController", ["$scope", "$http", "$showMap", "$showDirectio
         } 
         // if third page's result has not been fetched
         else if (thirdPagePlace == "") {
-            var nextPageUrl = "/next?next_page_token=" + next_page_token;
+            var nextPageUrl = "http://nodejsyutaoren.us-east-2.elasticbeanstalk.com/next?next_page_token=" + next_page_token;
             $http.get(nextPageUrl)
             .then(function(result) {
                 $scope.nextButton = false;
@@ -414,7 +417,7 @@ myApp.controller("appController", ["$scope", "$http", "$showMap", "$showDirectio
                     $scope.address = res.formatted_address;
                     $scope.phoneNumber = res.international_phone_number;
                     $scope.priceLevel = "";
-                    for(var i = 0; i < res.price_level; i++) {
+                    for(var p = 0; p < res.price_level; p++) {
                         $scope.priceLevel += "$";
                     }
                     $scope.rating = res.rating;
@@ -430,6 +433,10 @@ myApp.controller("appController", ["$scope", "$http", "$showMap", "$showDirectio
                             todayWeekIndex += moment().utc().add(res.utc_offset, "m").weekday();                            
                         } else {
                             todayWeekIndex += moment().utc().subtract(Math.abs(res.utc_offset), "m").weekday();
+                        }
+                        // corner case: if today is Sunday, then change to the currect index
+                        if(todayWeekIndex == -1) {
+                            todayWeekIndex = 6;
                         }
                         var today = res.opening_hours.weekday_text[todayWeekIndex];
                         $scope.todayWeek = today.slice(0, today.indexOf(":"));
@@ -460,14 +467,42 @@ myApp.controller("appController", ["$scope", "$http", "$showMap", "$showDirectio
                         }                   
                     }
                     // fetch data for the photos tab
+                    // for desktop side
+                    $scope.photoUrlCol1 = [];       
+                    $scope.photoUrlCol2 = [];       
+                    $scope.photoUrlCol3 = [];       
+                    $scope.photoUrlCol4 = [];
+                    // for mobile side
                     $scope.photoUrl = [];
                     // if there is no photo
                     if(res.photos == undefined) {
                         warnAlertPhotos = true;
-                    } else {
+                    } else {        
+                        var index1 = 0;
+                        var index2 = 0;
+                        var index3 = 0;
+                        var index4 = 0;
                         for(var j = 0; j < res.photos.length; j++) {
-                            $scope.photoUrl[j] = res.photos[j].getUrl({'maxWidth': 1200, 'maxHeight': 1200});
-                        }                         
+                            if(j == 0 || j == 4 || j == 8) {
+                                $scope.photoUrlCol1[index1] = res.photos[j].getUrl({'maxWidth': 1200, 'maxHeight': 1200});
+                                index1++;
+                            }
+                            if(j == 1 || j == 5 || j == 9) {
+                                $scope.photoUrlCol2[index2] = res.photos[j].getUrl({'maxWidth': 1200, 'maxHeight': 1200});
+                                index2++;
+                            }
+                            if(j == 2 || j == 6) {
+                                $scope.photoUrlCol3[index3] = res.photos[j].getUrl({'maxWidth': 1200, 'maxHeight': 1200});
+                                index3++;
+                            }
+                            if(j == 3 || j == 7) {
+                                $scope.photoUrlCol4[index4] = res.photos[j].getUrl({'maxWidth': 1200, 'maxHeight': 1200});
+                                index4++; 
+                            }
+                        }
+                        for(var q = 0; q < res.photos.length; q++) {
+                            $scope.photoUrl[q]  = res.photos[q].getUrl({'maxWidth': 1200, 'maxHeight': 1200});
+                        }
                     }
                     $scope.mapToLocation = res.name + ", " + res.formatted_address;
                     mapToGeoLoc = res.geometry.location;
@@ -527,10 +562,10 @@ myApp.controller("appController", ["$scope", "$http", "$showMap", "$showDirectio
                     // fetch city
                     cityName = address.slice(cityStartIndex + 2);
                     if(res.formatted_address.length > 64) {
-                        yelpMatchUrl = "/yelpSearch?name=" + res.name + "&city=" + cityName 
+                        yelpMatchUrl = "http://nodejsyutaoren.us-east-2.elasticbeanstalk.com/yelpSearch?name=" + res.name + "&city=" + cityName 
                                 + "&state=" + stateName + "&country=US";                        
                     } else {
-                        yelpMatchUrl = "/yelpSearch?name=" + res.name + "&city=" + cityName 
+                        yelpMatchUrl = "http://nodejsyutaoren.us-east-2.elasticbeanstalk.com/yelpSearch?name=" + res.name + "&city=" + cityName 
                                 + "&state=" + stateName + "&country=US&address1=" + res.formatted_address;                        
                     }
                     $http.get(yelpMatchUrl)
@@ -542,7 +577,7 @@ myApp.controller("appController", ["$scope", "$http", "$showMap", "$showDirectio
                                 warnAlertReviews = true;
                                 warnAlertReviewsYelp = true;
                             } else {
-                                var yelpReviewUrl = "/yelpReview?id=" + result.data.businesses[0].id;
+                                var yelpReviewUrl = "http://nodejsyutaoren.us-east-2.elasticbeanstalk.com/yelpReview?id=" + result.data.businesses[0].id;
                                 $http.get(yelpReviewUrl)
                                     .then(function(res) {
                                         if(res.data.reviews != undefined) {
@@ -859,6 +894,8 @@ myApp.controller("appController", ["$scope", "$http", "$showMap", "$showDirectio
             document.getElementById("warnAlert").classList.remove("my-switch-animation-reverse"); 
             $scope.warnAlert = true;
         } else {
+            // handle the case when the result table is warning
+            $scope.warnAlert = false;
             $scope.showFavoriteTable = true;
         }
         $scope.showTable = false;

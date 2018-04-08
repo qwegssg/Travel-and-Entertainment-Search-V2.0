@@ -1,10 +1,15 @@
 #searchForm {
     margin: 10px auto;
-    width: 1000px;
-    padding: 20px 150px;
+    padding: 2% 15%;
     border: 2px solid #cccccc;
     border-radius: 10px;
     background-color: #f8f8f8;
+}
+
+@media only screen and (max-width: 768px) {
+    #searchForm {
+        padding: 5%;      
+    }
 }
 
 .borderDanger {
@@ -25,34 +30,28 @@
 }
 
 #progressBar {
-    width: 1200px;
-    margin: 100px auto 0;
+    margin: 10% auto 0;
 
 }
 
 #warnAlert {
-    width: 1200px;
-    margin: 100px auto 0;
+    margin: 10% auto 0;
 }
 
 #warnAlertDanger {
-    width: 1200px;
-    margin: 100px auto 0;    
+    margin: 10% auto 0;    
 }
 
 #warnAlertPhotos {
-    width: 1100px;
-    margin: 100px auto 0;
+    margin: 10% auto 0;
 }
 
 #warnAlertMap {
-    width: 1100px;
-    margin: 100px auto 0;   
+    margin: 10% auto 0;   
 }
 
 #warnAlertReviews{
-    width: 1100px;
-    margin: 100px auto 0;  
+    margin: 10% auto 0;  
 }
 
 #resultPills {
@@ -82,6 +81,12 @@
 #detailsButtonFav:hover {
     background-color: #efefef;
     transition: 0.1s linear;
+}
+
+@media only screen and (max-width: 768px) {
+    .textNoWrap {
+        white-space: nowrap;
+    }
 }
 
 .placeRow:hover {
@@ -205,10 +210,14 @@
     overflow: hidden;
 }
 
-/*
-#detailPhotos {
-   float: right;
-}*/
+.photoCol {
+    padding-left: 5px;
+    padding-right: 5px;
+}
+.photoDetails {
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
 
 #pegman {
     width: 40px;
@@ -221,6 +230,16 @@
     margin-bottom: 10px;
 }
 
+@media only screen and (max-width: 768px) {
+    .mapCol {
+        margin-top: 5px;
+        margin-bottom: 5px;
+    }
+    .mapbuttonDetail {
+        justify-content: flex-start!important;
+    }
+}
+
 #twitter {
     width: 40px;
 }
@@ -229,14 +248,24 @@
     height: 500px;
 }
 
+#pano {
+    height: 500px;
+}
+
+@media only screen and (max-width: 768px) {
+    #map {
+        height: 400px;
+    }
+
+    #pano {
+        height: 400px;
+    } 
+}
+
 #mapForStreetView {
     width: 10px;
     height: 10px;
     opacity: 0;
-}
-
-#pano {
-    height: 500px;
 }
 
 #directionsPanel {
@@ -297,34 +326,3 @@
     left: 0;
     opacity: 1;
 }
-
-@media (min-width: 200px) {
-.card-columns {
-    -webkit-column-count: 4;
-    -moz-column-count: 4;
-    column-count: 4;
-    -webkit-column-gap: 1.25rem;
-    -moz-column-gap: 1.25rem;
-    column-gap: 1.25rem;
-}
-
-/* clearfix */
-/*.grid:after {
-  content: '';
-  display: block;
-  clear: both;
-}*/
-.grid-item {    
-    width: 220px; 
-    float: left;
-}
-
-/*.grid-item:before {
-  counter-increment: grid-item;
-  content: counter(grid-item);
-  display: block;
-  color: white;
-  padding-top: 0.2em;
-  text-align: center;
-  font-size: 1.4rem;
-}*/

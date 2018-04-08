@@ -1,6 +1,9 @@
 var express = require("express");
 var https = require("https");
 var app = express();
+var cors = require('cors');
+
+app.use(cors());
 
 app.use(express.static("./public"));
 // app.use(bodyParser.json());
