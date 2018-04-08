@@ -811,7 +811,7 @@ myApp.controller("appController", ["$scope", "$http", "$showMap", "$showDirectio
                     localStorage.setItem("placesStorage", placesAll); 
                 }
             }
-            // add to favorite list
+            // delete from favorite list 
             for(var j = 0; j < $scope.favList.length; j++) {
                 if($scope.favList[j] == $scope.placeDetailInfo.place_id) {
                     $scope.favList.splice(j, 1);
@@ -827,11 +827,11 @@ myApp.controller("appController", ["$scope", "$http", "$showMap", "$showDirectio
                 placesAll = JSON.parse(placesAll);
                 placesAll[placesAll.length] = $scope.placeDetailInfo;
             }   
-            // delete from favorite list 
-            $scope.favList[$scope.favList.length] = $scope.placeDetailInfo.place_id;
             $scope.localPlaces = placesAll;
             placesAll = JSON.stringify(placesAll);
             localStorage.setItem("placesStorage", placesAll); 
+            // add to favorite list
+            $scope.favList[$scope.favList.length] = $scope.placeDetailInfo.place_id;
         }
     };
 
@@ -873,7 +873,7 @@ myApp.controller("appController", ["$scope", "$http", "$showMap", "$showDirectio
             $scope.localPlaces = placesAll;
             placesAll = JSON.stringify(placesAll);
             localStorage.setItem("placesStorage", placesAll); 
-        } 
+        }
         // if the place is already in the favorite list
         else {
             $scope.favList.splice($scope.favList.indexOf(placeInfo.place_id), 1);          
@@ -906,7 +906,11 @@ myApp.controller("appController", ["$scope", "$http", "$showMap", "$showDirectio
         document.getElementById("favoriteTable").classList.remove("my-switch-animation-reverse"); 
         if($scope.placeDetailInfo != undefined && $scope.favList.indexOf($scope.placeDetailInfo.place_id) != -1) {
             if($scope.localPlaces.length != 0) {
-                document.getElementById($scope.placeDetailInfo.place_id + "fav").classList.add("selectedPlaceRow");                  
+                document.getElementById($scope.placeDetailInfo.place_id + "fav").classList.add("selectedPlaceRow");
+                // if detail search is not triggered
+                if($scope.isNotTriggered == true) {
+                    document.getElementById($scope.placeDetailInfo.place_id + "fav").classList.remove("selectedPlaceRow");    
+                }
             }
         }
     };

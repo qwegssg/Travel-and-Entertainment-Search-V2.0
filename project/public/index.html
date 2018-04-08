@@ -180,7 +180,7 @@
                 </thead>
                 <tbody>
                     <tr ng-repeat="y in localPlaces" class="placeRow" id="{{y.place_id + 'fav'}}">
-                        <th class="align-middle textNoWrap">{{ $indexFav + 1 }}</th>
+                        <th class="align-middle textNoWrap">{{ $index + 1 }}</th>
                         <td class="align-middle textNoWrap"><img ng-src="{{ y.icon }}"></td>
                         <td class="align-middle textNoWrap">{{ y.name }}</td>
                         <td class="align-middle textNoWrap">{{ y.vicinity }}</td>
@@ -200,10 +200,6 @@
                 </tbody>
             </table>
         </div>
-<!--         <div class="pageButton">        
-            <button id="previousButton" class="btn" type="button" ng-show="previousButton" ng-click=showPreviousPage()>Previous</button>
-            <button id="nextButton" class="btn" type="button" ng-show="nextButton" ng-click=showNextPage()>Next</button>
-        </div>    -->  
     </div>
 
 
