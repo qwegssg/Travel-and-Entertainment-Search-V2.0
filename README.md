@@ -34,14 +34,14 @@ Once the validation is successful and the user clicks on “Search” button, th
 The following are snapshots of the webpage opened with Safari on iPhone 8.  
 
 <div style="display:inline;margin:5%;">
-<img src="https://github.com/qwegssg/Travel-and-Entertainment-Search-V2.0/blob/master/snapshots/IMG_3111.jpg" width="25%">
-<img src="https://github.com/qwegssg/Travel-and-Entertainment-Search-V2.0/blob/master/snapshots/IMG_3112.jpg" width="25%">
-<img src="https://github.com/qwegssg/Travel-and-Entertainment-Search-V2.0/blob/master/snapshots/IMG_3113.jpg" width="25%">
+<img src="https://github.com/qwegssg/Travel-and-Entertainment-Search-V2.0/blob/master/snapshots/1.jpg" width="25%">
+<img src="https://github.com/qwegssg/Travel-and-Entertainment-Search-V2.0/blob/master/snapshots/2.jpg" width="25%">
+<img src="https://github.com/qwegssg/Travel-and-Entertainment-Search-V2.0/blob/master/snapshots/3.jpg" width="25%">
 </div>
 <div style="display:inline;margin:5%;">
-<img src="https://github.com/qwegssg/Travel-and-Entertainment-Search-V2.0/blob/master/snapshots/IMG_3114.ipg" width="25%">
-<img src="https://github.com/qwegssg/Travel-and-Entertainment-Search-V2.0/blob/master/snapshots/IMG_3115.ipg" width="25%">
-<img src="https://github.com/qwegssg/Travel-and-Entertainment-Search-V2.0/blob/master/snapshots/IMG_3126.ipg" width="25%">
+<img src="https://github.com/qwegssg/Travel-and-Entertainment-Search-V2.0/blob/master/snapshots/4.ipg" width="25%">
+<img src="https://github.com/qwegssg/Travel-and-Entertainment-Search-V2.0/blob/master/snapshots/5.ipg" width="25%">
+<img src="https://github.com/qwegssg/Travel-and-Entertainment-Search-V2.0/blob/master/snapshots/6.ipg" width="25%">
 </div>  
 
 ### Application link: http://nodejsyutaoren.us-east-2.elasticbeanstalk.com/
