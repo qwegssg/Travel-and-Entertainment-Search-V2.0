@@ -7,7 +7,11 @@ The server-side script is based on Node.js. The client-side script is based on A
 When a user initially opens the webpage, the page looks like Figure 1.
 ![Sorry! Something wrong with the img.](https://github.com/qwegssg/Travel-and-Entertainment-Search-V2.0/blob/master/snapshots/figure1.jpg)  
 <<<<<<< HEAD
+<<<<<<< HEAD
 <h4 align = "center">figure 1</h4>  
+=======
+<h4 align = "center">Figure 1</h4>  
+>>>>>>> 207d7e8513822541d5281fa9975fe2104948a4ed
 =======
 <h4 align = "center">Figure 1</h4>  
 >>>>>>> 207d7e8513822541d5281fa9975fe2104948a4ed
@@ -26,6 +30,7 @@ The search form has two buttons:
 **2. Clear:** This button resets the form fields, clear all validation errors if present, switch the view to the results tab and clear the results area.  
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 Search form validation is shown in figure 2:  
 ![Sorry! Something wrong with the img.](https://github.com/qwegssg/Travel-and-Entertainment-Search-V2.0/blob/master/snapshots/figure3.jpg)  
 <h4 align = "center">figure 2</h4>  
@@ -36,6 +41,8 @@ Once the validation is successful and the user clicks on “Search” button, th
 <h4 align = "center">figure 3</h4>  
 
 =======
+=======
+>>>>>>> 207d7e8513822541d5281fa9975fe2104948a4ed
 Search form validation is shown in Figure 2:  
 ![Sorry! Something wrong with the img.](https://github.com/qwegssg/Travel-and-Entertainment-Search-V2.0/blob/master/snapshots/figure3.png)  
 <h4 align = "center">Figure 2</h4>  
@@ -58,6 +65,9 @@ The following are snapshots of the webpage opened with Safari on iPhone 8.
 <img src="https://github.com/qwegssg/Travel-and-Entertainment-Search-V2.0/blob/master/snapshots/IMG_3115.ipg" width="25%">
 <img src="https://github.com/qwegssg/Travel-and-Entertainment-Search-V2.0/blob/master/snapshots/IMG_3126.ipg" width="25%">
 </div>  
+<<<<<<< HEAD
+>>>>>>> 207d7e8513822541d5281fa9975fe2104948a4ed
+=======
 >>>>>>> 207d7e8513822541d5281fa9975fe2104948a4ed
 
 ### Application link: http://nodejsyutaoren.us-east-2.elasticbeanstalk.com/
