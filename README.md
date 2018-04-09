@@ -45,6 +45,5 @@ The following are snapshots of the webpage opened with Safari on iPhone 8.
 <img src="https://github.com/qwegssg/Travel-and-Entertainment-Search-V2.0/blob/master/snapshots/5.jpg" width="25%">
 <img src="https://github.com/qwegssg/Travel-and-Entertainment-Search-V2.0/blob/master/snapshots/6.jpg" width="25%">
 </div>  
-
-
+  
 ### Application link: http://nodejsyutaoren.us-east-2.elasticbeanstalk.com/
