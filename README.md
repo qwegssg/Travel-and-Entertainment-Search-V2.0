@@ -7,7 +7,7 @@ The server-side script is based on Node.js. The client-side script is based on A
 When a user initially opens the webpage, the page looks like Figure 1.
 ![Sorry! Something wrong with the img.](https://github.com/qwegssg/Travel-and-Entertainment-Search-V2.0/blob/master/snapshots/figure1.jpg)  
 
-<h4 align = "center">figure 1</h4>  
+<h4 align = "center">Figure 1</h4>  
 
 
 ### 2.1 Search Form Design  
@@ -27,11 +27,6 @@ Search form validation is shown in Figure 2:
 ![Sorry! Something wrong with the img.](https://github.com/qwegssg/Travel-and-Entertainment-Search-V2.0/blob/master/snapshots/figure3.png)  
 <h4 align = "center">Figure 2</h4>  
 
-### 2.1 Results Tab  
-Once the validation is successful and the user clicks on “Search” button, the application makes an AJAX call to the Node.js script hosted on AWS. The Node.js script on AWS will then make a request to Google Places API to get the places information. A sample output is shown in Figure 3. The displayed table includes six columns: # (Index number), Category, Name, Address, Favorite and Details.  
-![Sorry! Something wrong with the img.](https://github.com/qwegssg/Travel-and-Entertainment-Search-V2.0/blob/master/snapshots/figure2.jpg)  
-<h4 align = "center">Figure 3</h4>    
-
 ### 2.2 Results Tab  
 Once the validation is successful and the user clicks on “Search” button, the application makes an AJAX call to the Node.js script hosted on AWS. The Node.js script on AWS will then make a request to Google Places API to get the places information. A sample output is shown in Figure 3. The displayed table includes six columns: # (Index number), Category, Name, Address, Favorite and Details.  
 ![Sorry! Something wrong with the img.](https://github.com/qwegssg/Travel-and-Entertainment-Search-V2.0/blob/master/snapshots/figure2.png)  
@@ -40,12 +35,12 @@ Once the validation is successful and the user clicks on “Search” button, th
 ### 2.3 Responsive Design  
 The following are snapshots of the webpage opened with Safari on iPhone 8.  
 
-<div style="display:inline;margin:20px;">
+<div style="display:inline;">
 <img src="https://github.com/qwegssg/Travel-and-Entertainment-Search-V2.0/blob/master/snapshots/1.jpg" width="25%">
 <img src="https://github.com/qwegssg/Travel-and-Entertainment-Search-V2.0/blob/master/snapshots/2.jpg" width="25%">
 <img src="https://github.com/qwegssg/Travel-and-Entertainment-Search-V2.0/blob/master/snapshots/3.jpg" width="25%">
 </div>
-<div style="display:inline;margin:20px;">
+<div style="display:inline;">
 <img src="https://github.com/qwegssg/Travel-and-Entertainment-Search-V2.0/blob/master/snapshots/4.jpg" width="25%">
 <img src="https://github.com/qwegssg/Travel-and-Entertainment-Search-V2.0/blob/master/snapshots/5.jpg" width="25%">
 <img src="https://github.com/qwegssg/Travel-and-Entertainment-Search-V2.0/blob/master/snapshots/6.jpg" width="25%">
