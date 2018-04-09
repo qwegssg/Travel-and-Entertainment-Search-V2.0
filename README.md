@@ -23,18 +23,14 @@ The search form has two buttons:
 **1. Search:** The “Search” button is disabled whenever either of the required fields is empty or validation fails or the user location is not obtained yet.  
 **2. Clear:** This button resets the form fields, clear all validation errors if present, switch the view to the results tab and clear the results area.  
 
-Search form validation is shown in figure 2:  
-![Sorry! Something wrong with the img.](https://github.com/qwegssg/Travel-and-Entertainment-Search-V2.0/blob/master/snapshots/figure3.jpg)  
-<h4 align = "center">figure 2</h4>  
+Search form validation is shown in Figure 2:  
+![Sorry! Something wrong with the img.](https://github.com/qwegssg/Travel-and-Entertainment-Search-V2.0/blob/master/snapshots/figure3.png)  
+<h4 align = "center">Figure 2</h4>  
 
 ### 2.1 Results Tab  
 Once the validation is successful and the user clicks on “Search” button, the application makes an AJAX call to the Node.js script hosted on AWS. The Node.js script on AWS will then make a request to Google Places API to get the places information. A sample output is shown in Figure 3. The displayed table includes six columns: # (Index number), Category, Name, Address, Favorite and Details.  
 ![Sorry! Something wrong with the img.](https://github.com/qwegssg/Travel-and-Entertainment-Search-V2.0/blob/master/snapshots/figure2.jpg)  
-<h4 align = "center">figure 3</h4>  
-
-Search form validation is shown in Figure 2:  
-![Sorry! Something wrong with the img.](https://github.com/qwegssg/Travel-and-Entertainment-Search-V2.0/blob/master/snapshots/figure3.png)  
-<h4 align = "center">Figure 2</h4>  
+<h4 align = "center">Figure 3</h4>    
 
 ### 2.2 Results Tab  
 Once the validation is successful and the user clicks on “Search” button, the application makes an AJAX call to the Node.js script hosted on AWS. The Node.js script on AWS will then make a request to Google Places API to get the places information. A sample output is shown in Figure 3. The displayed table includes six columns: # (Index number), Category, Name, Address, Favorite and Details.  
@@ -44,15 +40,15 @@ Once the validation is successful and the user clicks on “Search” button, th
 ### 2.3 Responsive Design  
 The following are snapshots of the webpage opened with Safari on iPhone 8.  
 
-<div style="display:inline;margin:5%;">
+<div style="display:inline;margin:20px;">
 <img src="https://github.com/qwegssg/Travel-and-Entertainment-Search-V2.0/blob/master/snapshots/1.jpg" width="25%">
 <img src="https://github.com/qwegssg/Travel-and-Entertainment-Search-V2.0/blob/master/snapshots/2.jpg" width="25%">
 <img src="https://github.com/qwegssg/Travel-and-Entertainment-Search-V2.0/blob/master/snapshots/3.jpg" width="25%">
 </div>
-<div style="display:inline;margin:5%;">
-<img src="https://github.com/qwegssg/Travel-and-Entertainment-Search-V2.0/blob/master/snapshots/4.ipg" width="25%">
-<img src="https://github.com/qwegssg/Travel-and-Entertainment-Search-V2.0/blob/master/snapshots/5.ipg" width="25%">
-<img src="https://github.com/qwegssg/Travel-and-Entertainment-Search-V2.0/blob/master/snapshots/6.ipg" width="25%">
+<div style="display:inline;margin:20px;">
+<img src="https://github.com/qwegssg/Travel-and-Entertainment-Search-V2.0/blob/master/snapshots/4.jpg" width="25%">
+<img src="https://github.com/qwegssg/Travel-and-Entertainment-Search-V2.0/blob/master/snapshots/5.jpg" width="25%">
+<img src="https://github.com/qwegssg/Travel-and-Entertainment-Search-V2.0/blob/master/snapshots/6.jpg" width="25%">
 </div>  
 
 
