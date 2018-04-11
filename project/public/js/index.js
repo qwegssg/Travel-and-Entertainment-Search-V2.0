@@ -777,14 +777,24 @@ myApp.controller("appController", ["$scope", "$http", "$showMap", "$showDirectio
 
     $scope.goToList = function() {
         $scope.toDetail = false;
+        // go to place list
         if($scope.placeActive == true) {
             $scope.showTable = true;           
             document.getElementById("placeTable").classList.add("my-switch-animation-reverse");
-        } else if($scope.favActive == true) {
+        }
+        // go to favorite list 
+        else if($scope.favActive == true) {
             if($scope.localPlaces.length == 0) {
                 $scope.warnAlert = true;
                 document.getElementById("warnAlert").classList.add("my-switch-animation-reverse");
             } else {
+                // for pagination
+                if(favPageNum * 20 < $scope.localPlaces.length) {
+                    $scope.nextButtonFav = true;
+                }
+                if(favPageNum > 1) {
+                       $scope.previousButtonFav = true;
+                }
                 $scope.showFavoriteTable = true;
                 document.getElementById("favoriteTable").classList.add("my-switch-animation-reverse");
                 if($scope.placeDetailInfo != undefined && $scope.favList.indexOf($scope.placeDetailInfo.place_id) != -1) {
@@ -793,6 +803,29 @@ myApp.controller("appController", ["$scope", "$http", "$showMap", "$showDirectio
                     }
                 }
             }
+        }
+    };
+
+    var favPageNum = 1;
+    $scope.favStart = 0;
+
+    $scope.showNextPageFav = function() {
+        $scope.favStart += 20;
+        favPageNum++;
+        $scope.previousButtonFav = true;
+        if(favPageNum * 20 > $scope.localPlaces.length || favPageNum * 20 == $scope.localPlaces.length) {
+            $scope.nextButtonFav = false; 
+        }
+    };
+
+    $scope.showPreviousPageFav = function() {
+        $scope.favStart -= 20;
+        favPageNum--;
+        if(favPageNum == 1) {
+           $scope.previousButtonFav = false; 
+        }
+        if(favPageNum * 20 < $scope.localPlaces.length) {
+            $scope.nextButtonFav = true; 
         }
     };
 
@@ -832,7 +865,7 @@ myApp.controller("appController", ["$scope", "$http", "$showMap", "$showDirectio
             localStorage.setItem("placesStorage", placesAll); 
             // add to favorite list
             $scope.favList[$scope.favList.length] = $scope.placeDetailInfo.place_id;
-        }
+        }        
     };
 
     $scope.deleteFav = function(the_place_id) {
@@ -894,6 +927,16 @@ myApp.controller("appController", ["$scope", "$http", "$showMap", "$showDirectio
             document.getElementById("warnAlert").classList.remove("my-switch-animation-reverse"); 
             $scope.warnAlert = true;
         } else {
+            // for pagination
+            if(favPageNum * 20 < $scope.localPlaces.length) {
+                $scope.nextButtonFav = true;
+            }
+            if(favPageNum > 1) {
+                   $scope.previousButtonFav = true;
+            }
+            if(favPageNum * 20 > $scope.localPlaces.length || favPageNum * 20 == $scope.localPlaces.length) {
+                $scope.nextButtonFav = false; 
+            }
             // handle the case when the result table is warning
             $scope.warnAlert = false;
             $scope.showFavoriteTable = true;
@@ -906,10 +949,13 @@ myApp.controller("appController", ["$scope", "$http", "$showMap", "$showDirectio
         document.getElementById("favoriteTable").classList.remove("my-switch-animation-reverse"); 
         if($scope.placeDetailInfo != undefined && $scope.favList.indexOf($scope.placeDetailInfo.place_id) != -1) {
             if($scope.localPlaces.length != 0) {
-                document.getElementById($scope.placeDetailInfo.place_id + "fav").classList.add("selectedPlaceRow");
-                // if detail search is not triggered
-                if($scope.isNotTriggered == true) {
-                    document.getElementById($scope.placeDetailInfo.place_id + "fav").classList.remove("selectedPlaceRow");    
+                // handle the case when the detailed favorite place is not on the current page
+                if(document.getElementById($scope.placeDetailInfo.place_id + "fav") != null) {
+                    document.getElementById($scope.placeDetailInfo.place_id + "fav").classList.add("selectedPlaceRow");
+                    // if detail search is not triggered
+                    if($scope.isNotTriggered == true) {
+                        document.getElementById($scope.placeDetailInfo.place_id + "fav").classList.remove("selectedPlaceRow");    
+                    }                    
                 }
             }
         }

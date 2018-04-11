@@ -179,7 +179,7 @@
                     </tr> 
                 </thead>
                 <tbody>
-                    <tr ng-repeat="y in localPlaces" class="placeRow" id="{{y.place_id + 'fav'}}">
+                    <tr ng-repeat="y in localPlaces | limitTo : 20 : favStart" class="placeRow" id="{{y.place_id + 'fav'}}">
                         <th class="align-middle textNoWrap">{{ $index + 1 }}</th>
                         <td class="align-middle textNoWrap"><img ng-src="{{ y.icon }}"></td>
                         <td class="align-middle textNoWrap">{{ y.name }}</td>
@@ -199,6 +199,11 @@
                     </tr>            
                 </tbody>
             </table>
+        </div>
+
+        <div class="pageButton">        
+            <button id="previousButtonFav" class="btn" type="button" ng-show="previousButtonFav" ng-click=showPreviousPageFav()>Previous</button>
+            <button id="nextButtonFav" class="btn" type="button" ng-show="nextButtonFav" ng-click=showNextPageFav()>Next</button>
         </div>
     </div>
 
