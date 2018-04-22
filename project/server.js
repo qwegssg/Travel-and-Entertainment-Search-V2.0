@@ -131,6 +131,25 @@ app.get("/yelpReview", function(req, res) {
 });
 
 
+// get place detail
+app.get("/detail", function(req, res) {
+    var placeid = req.query.placeid;
+    var responseData = "";
+    var placeDetailUrl = "https://maps.googleapis.com/maps/api/place/details/json?placeid=" 
+                        + placeid + "&key=AIzaSyDhC1Tha8FKORJfe7--SYluRWe_n1LVMoE";
+    https.get(placeDetailUrl, function(response) {
+        response.on("data", function(data) {
+            // JSON format
+            responseData += data;
+        });
+        response.on("end", function() {
+            res.send(responseData);
+        });    
+    });
+});
+
+
+
 const PORT = process.env.PORT || 8080;
 app.listen(PORT, () => {
   console.log(`App listening on port ${PORT}`);

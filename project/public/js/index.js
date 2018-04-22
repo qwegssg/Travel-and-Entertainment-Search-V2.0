@@ -179,8 +179,10 @@ myApp.controller("appController", ["$scope", "$http", "$showMap", "$showDirectio
         var url = "http://nodejsyutaoren.us-east-2.elasticbeanstalk.com/search?keyword=" + $scope.keyword + "&category=" + $scope.selectedType.value 
                     + "&distance=" + $scope.distance + "&geoLocation=" + $scope.location
                     + "&otherLocation=" + encodeURI(otherLocation);
+        console.log(url);
         $http.get(url)
         .then(function(result) {
+            console.log(result);
             var result = result.data;
             if(result.status == "ZERO_RESULTS") {
                 $scope.progressing = false;
