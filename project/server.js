@@ -6,8 +6,6 @@ var cors = require('cors');
 app.use(cors());
 
 app.use(express.static("./public"));
-// app.use(bodyParser.json());
-// app.use(bodyParser.urlencoded({ extended: false }));
 
 app.get("/search", function(req, res) {
     var responseData = "";
@@ -67,8 +65,6 @@ app.get("/search", function(req, res) {
         });
     }
 });
-
-
 
 app.get("/next", function(req, res) {
     var next_page_token = req.query.next_page_token;
@@ -130,7 +126,6 @@ app.get("/yelpReview", function(req, res) {
     });
 });
 
-
 // get place detail
 app.get("/detail", function(req, res) {
     var placeid = req.query.placeid;
@@ -147,8 +142,6 @@ app.get("/detail", function(req, res) {
         });    
     });
 });
-
-
 
 const PORT = process.env.PORT || 8080;
 app.listen(PORT, () => {
