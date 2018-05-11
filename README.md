@@ -63,7 +63,6 @@ Below the form, there is a Google Map centered at the target place with a marker
 ![Sorry! Something wrong with the img.](https://github.com/qwegssg/Travel-and-Entertainment-Search-V2.0/blob/master/snapshots/Street_View.jpeg)  
 <h4 align = "center">Figure 2.8</h4>  
 Once the “Get Directions” button is enabled and clicked, the route from the starting point to the destination in the specified travel mode is displayed. The detailed travel instructions is displayed below the map. All the feasible routes are listed below the map. The route selected by the user is displayed on the map and the travel instructions is listed below, as shown in Figure 2.9:  
-<br>  
 
 ![Sorry! Something wrong with the img.](https://github.com/qwegssg/Travel-and-Entertainment-Search-V2.0/blob/master/snapshots/Map_Tab2.jpeg)  
 <h4 align = "center">Figure 2.9</h4>  
@@ -93,5 +92,6 @@ The following are snapshots of the webpage opened with Safari on iPhone 8.
 <img src="https://github.com/qwegssg/Travel-and-Entertainment-Search-V2.0/blob/master/snapshots/5.jpg" width="25%">
 <img src="https://github.com/qwegssg/Travel-and-Entertainment-Search-V2.0/blob/master/snapshots/6.jpg" width="25%">
 </div>  
-  
+<br>  
+
 ### Application link: http://nodejsyutaoren.us-east-2.elasticbeanstalk.com/
