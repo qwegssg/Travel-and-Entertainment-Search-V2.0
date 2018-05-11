@@ -59,14 +59,28 @@ Below the form, there is a Google Map centered at the target place with a marker
 ![Sorry! Something wrong with the img.](https://github.com/qwegssg/Travel-and-Entertainment-Search-V2.0/blob/master/snapshots/Map_Tab1.jpeg)  
 <h4 align = "center">Figure 2.7</h4>  
 <br>  
+
 ![Sorry! Something wrong with the img.](https://github.com/qwegssg/Travel-and-Entertainment-Search-V2.0/blob/master/snapshots/Street_View.jpeg)  
 <h4 align = "center">Figure 2.8</h4>  
 Once the “Get Directions” button is enabled and clicked, the route from the starting point to the destination in the specified travel mode is displayed. The detailed travel instructions is displayed below the map. All the feasible routes are listed below the map. The route selected by the user is displayed on the map and the travel instructions is listed below, as shown in Figure 2.9:  
+<br>  
 
 ![Sorry! Something wrong with the img.](https://github.com/qwegssg/Travel-and-Entertainment-Search-V2.0/blob/master/snapshots/Map_Tab2.jpeg)  
 <h4 align = "center">Figure 2.9</h4>  
 
-### 2.dfdfdfd Responsive Design  
+#### 2.3.4 Reviews Tab  
+This tab displays the Google reviews and Yelp reviews of the place. By default, Google reviews are displayed in the default order. There are two dropdowns in this tab. The first one allows the user to switch between Google reviews and Yelp reviews. The second one allows the user to sort the reviews in several different ways: Default Order, Highest Rating, Lowest Rating, Most Recent and Least Recent.  
+Each of reviews has its author name, author image, time, rating, and content. The author name and image are clickable. Once they are clicked, a new page is opened and go to the author’s page for Google reviews or the review page for Yelp reviews.  
+![Sorry! Something wrong with the img.](https://github.com/qwegssg/Travel-and-Entertainment-Search-V2.0/blob/master/snapshots/Reviews_Tab.jpeg)  
+<h4 align = "center">Figure 2.10</h4>  
+
+### 2.4 Favorites Tab  
+The favorites tab is very similar to the results tab: the places on the list are displayed in a table; there is a button that allows the user to go to the details view and is disabled initially; the user can search for place details by clicking on the buttons in the “Details” column; pagination is supported with each page containing up to 20 records.  
+![Sorry! Something wrong with the img.](https://github.com/qwegssg/Travel-and-Entertainment-Search-V2.0/blob/master/snapshots/Fav_Tab.jpeg)  
+<h4 align = "center">Figure 2.11</h4>  
+The place information displayed in the favorites tab is saved in and loaded from the local storage of the browser; the buttons in the “Favorite” column of the favorites tab is used to remove a place from the list and has a trash can icon instead of a star icon in results tab; the places in the favorites tab are sorted in the order they are added to the favorites list.  
+
+### 2.5 Responsive Design  
 The following are snapshots of the webpage opened with Safari on iPhone 8.  
 
 <div style="display:inline;">
