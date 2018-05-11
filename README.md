@@ -38,11 +38,33 @@ Once a button in the “Details” column is clicked, the webpage searches for t
 #### 2.3.1 Info Tab  
 A table containing the detailed info of the place is displayed in this tab. The tab is shown in Figure 2.4. There is a “link” with text “Daily open hours” in the “Hours” field. Once it is clicked, it opens a new dialog displaying the open hours of every day with the current day’s hours at the top, as shown in Figure 2.5;
 ![Sorry! Something wrong with the img.](https://github.com/qwegssg/Travel-and-Entertainment-Search-V2.0/blob/master/snapshots/Info_Tab.jpeg)
-<h4 align = "center">Figure 2.4</h4>  
-
-
+<h4 align = "center">Figure 2.4</h4> 
+<br>  
+  
 ![Sorry! Something wrong with the img.](https://github.com/qwegssg/Travel-and-Entertainment-Search-V2.0/blob/master/snapshots/Opening_Hours.jpeg)  
 <h4 align = "center">Figure 2.5</h4>  
+  
+#### 2.3.2 Photos Tab  
+Photos are displayed in four columns. When a photo is clicked, a new tab is opened to display that photo in its original size. Photos Tab are shown in Figure 2.6:  
+![Sorry! Something wrong with the img.](https://github.com/qwegssg/Travel-and-Entertainment-Search-V2.0/blob/master/snapshots/Photos_Tab.jpeg)  
+<h4 align = "center">Figure 2.6</h4>  
+
+#### 2.3.3 Map Tab  
+A Direction Search Form is shown on the top of Map Tab. This form has three input fields and a button:  
+**From:** The starting point goes into this field. If the user uses “Current location” in the initial search form, the default value of this field should be “Your location” which means the user location. Otherwise, the default value is the location specified by the user. The field supports autocomplete function. The user can enter “My location” to use the user’s current location as the starting point.  
+**To:** This is a read-only field which contains the name and the address of the target place whose details are being displayed.  
+**Travel Mode:** This is a dropdown list containing four travel modes: Driving, Bicycling, Transit, and Walking. The default value is Driving.  
+**Get Directions:** This button is disabled if “From” field is empty or contains only spaces.  
+Below the form, there is a Google Map centered at the target place with a marker on it by default，as shown in Figure 2.7. There is a button between the map and the form which toggles the Google Street View, as shown in Figure 2.8. 
+![Sorry! Something wrong with the img.](https://github.com/qwegssg/Travel-and-Entertainment-Search-V2.0/blob/master/snapshots/Map_Tab1.jpeg)  
+<h4 align = "center">Figure 2.7</h4>  
+<br>  
+![Sorry! Something wrong with the img.](https://github.com/qwegssg/Travel-and-Entertainment-Search-V2.0/blob/master/snapshots/Street_View.jpeg)  
+<h4 align = "center">Figure 2.8</h4>  
+Once the “Get Directions” button is enabled and clicked, the route from the starting point to the destination in the specified travel mode is displayed. The detailed travel instructions is displayed below the map. All the feasible routes are listed below the map. The route selected by the user is displayed on the map and the travel instructions is listed below, as shown in Figure 2.9:  
+
+![Sorry! Something wrong with the img.](https://github.com/qwegssg/Travel-and-Entertainment-Search-V2.0/blob/master/snapshots/Map_Tab2.jpeg)  
+<h4 align = "center">Figure 2.9</h4>  
 
 ### 2.dfdfdfd Responsive Design  
 The following are snapshots of the webpage opened with Safari on iPhone 8.  
