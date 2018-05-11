@@ -32,7 +32,15 @@ Once the validation is successful and the user clicks on “Search” button, th
 ![Sorry! Something wrong with the img.](https://github.com/qwegssg/Travel-and-Entertainment-Search-V2.0/blob/master/snapshots/Place_list.png)  
 <h4 align = "center">Figure 3</h4>  
 
-### 2.3 Responsive Design  
+### 2.3 Details  
+Once a button in the “Details” column is clicked, the webpage searches for the details of that place. Above the tabs in the details view, the name of the place, a button that allows users to go back to the previous list, a favorites button and a Twitter button are displayed.  
+
+#### 2.3.1 Info Tab  
+A table containing the detailed info of the place is displayed in this tab. The tab is shown in Figure 4. There is a “link” with text “Daily open hours” in the “Hours” field. Once it is clicked, it opens a new dialog displaying the open hours of every day with the current day’s hours at the top.  
+<h4 align = "center">Figure 4</h4>  
+
+
+### 2.dfdfdfd Responsive Design  
 The following are snapshots of the webpage opened with Safari on iPhone 8.  
 
 <div style="display:inline;">
