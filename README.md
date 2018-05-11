@@ -38,8 +38,10 @@ Once a button in the “Details” column is clicked, the webpage searches for t
 #### 2.3.1 Info Tab  
 A table containing the detailed info of the place is displayed in this tab. The tab is shown in Figure 2.4. There is a “link” with text “Daily open hours” in the “Hours” field. Once it is clicked, it opens a new dialog displaying the open hours of every day with the current day’s hours at the top, as shown in Figure 2.5;
 ![Sorry! Something wrong with the img.](https://github.com/qwegssg/Travel-and-Entertainment-Search-V2.0/blob/master/snapshots/Info_Tab.jpeg)
-<h4 align = "center">Figure 2.4</h4> 
-![Sorry! Something wrong with the img.](https://github.com/qwegssg/Travel-and-Entertainment-Search-V2.0/blob/master/snapshots/Opening_Hours.jpeg)
+<h4 align = "center">Figure 2.4</h4>  
+
+
+![Sorry! Something wrong with the img.](https://github.com/qwegssg/Travel-and-Entertainment-Search-V2.0/blob/master/snapshots/Opening_Hours.jpeg)  
 <h4 align = "center">Figure 2.5</h4>  
 
 ### 2.dfdfdfd Responsive Design  
