@@ -491,31 +491,31 @@ myApp.controller("appController", ["$scope", "$http", "$showMap", "$showDirectio
                         warnAlertReviews = true;
                         warnAlertReviewsGoogle = true;
                     } else {
-                        for(var k = 0; k < reviews.length; k++) {
+                        for(let review of reviews) {
                             var ratingStar = "";
-                            for(var l = 0; l < reviews[k].rating; l++) {
+                            for(var l = 0; l < review.rating; l++) {
                                 ratingStar += "★";
                             }
                             // add rating star notation into reviews object
-                            reviews[k]["ratingStar"] = ratingStar;
+                            review["ratingStar"] = ratingStar;
                         }
                         // add time
-                        for(var m = 0; m < reviews.length; m++) {
-                            var date = new Date(reviews[m].time * 1000);
-                            var hour = "0" + date.getHours();
-                            var minute = "0" + date.getMinutes();
-                            var second = "0" + date.getSeconds();
-                            var year = date.getFullYear();
-                            // Returns the month (from 0-11)
-                            var month = date.getMonth() + 1;
-                            month = "0" + month;
-                            var date = "0" + date.getDate();
-                            var formattedDate = year + "-" + month.substr(-2) + "-" + date.substr(-2);
-                            var formattedTime = hour.substr(-2) + ":" + minute.substr(-2) + ":" + second.substr(-2);
-                            var time = formattedDate + " " + formattedTime;
-                            reviews[m]["date"] = time;
+                        for(let review of reviews) {
+                            var date = new Date(review.time * 1000),
+                                hour = "0" + date.getHours(),
+                                minute = "0" + date.getMinutes(),
+                                second = "0" + date.getSeconds(),
+                                year = date.getFullYear(),
+                                // Returns the month (from 0-11)
+                                month = date.getMonth() + 1;
+                                month = "0" + month;
+                            var date = "0" + date.getDate(),
+                                formattedDate = year + "-" + month.substr(-2) + "-" + date.substr(-2),
+                                formattedTime = hour.substr(-2) + ":" + minute.substr(-2) + ":" + second.substr(-2),
+                                time = formattedDate + " " + formattedTime;
+                            review["date"] = time;
                             // add index in order to remember the default sort
-                            reviews[m]["index"] = m;
+                            review["index"] = m;
                         }
                         $scope.reviews = reviews;
                         $scope.showGoogleReview = true;
@@ -559,11 +559,11 @@ myApp.controller("appController", ["$scope", "$http", "$showMap", "$showDirectio
                                     .then(function(res) {
                                         if(res.data.reviews != undefined) {
                                             yelpReviews = res.data.reviews;
-                                            for(var i = 0; i < yelpReviews.length; i++) {
+                                            for(let i = 0; i < yelpReviews.length; i++) {
                                                 var ratingStarYelp = "";
                                                 // add index in order to remember the default sort
                                                 yelpReviews[i]["index"] = i;
-                                                for(var j = 0; j < yelpReviews[i].rating; j++) {
+                                                for(let j = 0; j < yelpReviews[i].rating; j++) {
                                                     ratingStarYelp += "★"; 
                                                 }
                                                 yelpReviews[i]["ratingStar"] = ratingStarYelp;
