@@ -356,11 +356,11 @@ myApp.controller("appController", ["$scope", "$http", "$showMap", "$showDirectio
                     $scope.progressing = false;
                     // set the background color of the selected row
                     var placeRows = document.getElementsByClassName("placeRow");
-                    for(var i = 0; i < placeRows.length; i++) {
-                        placeRows[i].classList.remove("selectedPlaceRow");
+                    for(let placeItem of placeRows) {
+                        placeItem.classList.remove("selectedPlaceRow");
                     }
                     // handle the case when search is not committed, pressing details button in the favorite list
-                    if(document.getElementById(place_id) == null && document.getElementById(place_id + "fav") != null ) {
+                    if(document.getElementById(place_id) == null && document.getElementById(place_id + "fav") != null) {
                         document.getElementById(place_id + "fav").classList.add("selectedPlaceRow");                        
                     }
                     if(document.getElementById(place_id) != null) {
@@ -369,8 +369,8 @@ myApp.controller("appController", ["$scope", "$http", "$showMap", "$showDirectio
                     // set the favorite button of favorites places
                     if($scope.localPlaces.length != 0) {
                         $scope.addToFavorite = false;
-                        for(var s = 0; s < $scope.localPlaces.length; s++) {
-                            if(place_id == $scope.localPlaces[s].place_id) {
+                        for(let place of $scope.localPlaces) {
+                            if(place_id == place.place_id) {
                                 $scope.addToFavorite = true;
                             }
                         }
@@ -415,23 +415,24 @@ myApp.controller("appController", ["$scope", "$http", "$showMap", "$showDirectio
                         if(todayWeekIndex == -1) {
                             todayWeekIndex = 6;
                         }
-                        var today = res.opening_hours.weekday_text[todayWeekIndex];
+                        var openingArr = res.opening_hours.weekday_text;
+                        var today = openingArr[todayWeekIndex];
                         $scope.todayWeek = today.slice(0, today.indexOf(":"));
                         $scope.todayHour = today.slice(today.indexOf(":") + 2);
                         $scope.otherDays = [];
                         var counter = 0;
-                        for(var m = todayWeekIndex + 1; m < res.opening_hours.weekday_text.length; m++) {
-                            $scope.otherDays[counter] = {"week": res.opening_hours.weekday_text[m].slice(0, 
-                                                        res.opening_hours.weekday_text[m].indexOf(":")),
-                                                    "hour": res.opening_hours.weekday_text[m].slice(
-                                                        res.opening_hours.weekday_text[m].indexOf(":") + 2)};
+                        for(var m = todayWeekIndex + 1; m < openingArr.length; m++) {
+                            $scope.otherDays[counter] = {
+                                                            "week": openingArr[m].slice(0, openingArr[m].indexOf(":")),
+                                                            "hour": openingArr[m].slice(openingArr[m].indexOf(":") + 2)
+                                                        };
                             counter++;
                         }
                         for(var n = 0; n < todayWeekIndex; n++) {
-                            $scope.otherDays[counter] = {"week": res.opening_hours.weekday_text[n].slice(0, 
-                                                    res.opening_hours.weekday_text[n].indexOf(":")),
-                                                    "hour": res.opening_hours.weekday_text[n].slice(
-                                                        res.opening_hours.weekday_text[n].indexOf(":") + 2)};
+                            $scope.otherDays[counter] = {
+                                                            "week": openingArr[n].slice(0, openingArr[n].indexOf(":")),
+                                                            "hour": openingArr[n].slice(openingArr[n].indexOf(":") + 2)
+                                                        };
                             counter++;
                         }
                         $scope.hours = "";
@@ -439,8 +440,7 @@ myApp.controller("appController", ["$scope", "$http", "$showMap", "$showDirectio
                             $scope.hours += "Closed";
                         } else {
                             $scope.hours += "Open now: ";
-                            $scope.hours += res.opening_hours.weekday_text[todayWeekIndex].slice(
-                                            res.opening_hours.weekday_text[todayWeekIndex].indexOf(":") + 2);
+                            $scope.hours += openingArr[todayWeekIndex].slice(openingArr[todayWeekIndex].indexOf(":") + 2);
                         }                   
                     }
                     // fetch data for the photos tab
