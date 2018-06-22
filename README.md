@@ -1,6 +1,6 @@
 # Travel-and-Entertainment-Search-V2.0. 
 ## 1. Introduction
-Create a webpage that allows users to search for places using the Google Places API and display the results on the same page below the form. Once the user clicks on a button to search for place details, the webpage displays several tabs which contain an info table, photos of the place, map and route search form and reviews respectively. The webpage also supports adding places to and removing places from favorites list and posting place info to Twitter.  
+Create a webpage that allows users to search for places using the Google Places API and display the search results on the same page below the form. Once the user clicks on a button to search for place details, the webpage displays several tabs which contain an info table, photos of the place, map and route search form and reviews respectively. The webpage also supports adding places to and removing places from favorites list and posting place info to Twitter.  
 
 The server-side script is based on Node.js. The client-side script is based on AngularJS. The application is deployed on AWS cloud.
 ## 2. Description
