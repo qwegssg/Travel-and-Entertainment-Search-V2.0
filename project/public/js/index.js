@@ -4,9 +4,6 @@ var myApp = angular.module("myApp", ["ngAnimate"]);
 myApp.controller("appController", ["$scope", "$http", "$showMap", "$showDirection",
                                     function($scope, $http, $showMap, $showDirection) {
     
-    initForm();
-    initFavList();
-
     // fetch the client side geolocation
     $http.get("http://ip-api.com/json")
         .then(function(result) {
@@ -16,94 +13,8 @@ myApp.controller("appController", ["$scope", "$http", "$showMap", "$showDirectio
             $scope.isNotFetched = false;
     });
 
-    function initForm() {
-        $scope.keyword = undefined;
-        $scope.otherLocation = undefined;
-        $scope.isDisabled = true;
-        $scope.checkHere = true;
-        $scope.checkOther = false;
-        $scope.requireKeyword = true;
-        // the search button is disabled before the user location is fetched
-        $scope.isNotFetched = true;
-        // details button is disabled in the beginning
-        $scope.isNotTriggered = true;
-        // switch pills to place table
-        $scope.placeActive = true;
-        $scope.favActive = false;
-        // empty the places info
-        $scope.places = undefined;
-
-        $scope.categories = [
-            {name: "Default", value: "default"},
-            {name: "Airport", value: "airport"},
-            {name: "Amusement Park", value: "amusement_park"},
-            {name: "Aquarium", value: "aquarium"},
-            {name: "Art Gallery", value: "art_gallery"},
-            {name: "Bakery", value: "bakery"},
-            {name: "Bar", value: "bar"},
-            {name: "Beauty Salon", value: "beauty_salon"},
-            {name: "Bowling Alley", value: "bowling_alley"},
-            {name: "Bus Station", value: "bus_station"},
-            {name: "Cafe", value: "cafe"},
-            {name: "Campground", value: "campground"},
-            {name: "Car Rental", value: "car_rental"},
-            {name: "Casino", value: "casino"},
-            {name: "Lodging", value: "lodging"},
-            {name: "Movie Theater", value: "movie_theater"},
-            {name: "Museum", value: "museum"},
-            {name: "Night Club", value: "night_club"},
-            {name: "Park", value: "park"},
-            {name: "Parking", value: "parking"},
-            {name: "Restaurant", value: "restaurant"},
-            {name: "Shopping Mall", value: "shopping_mall"},
-            {name: "Stadium", value: "stadium"},
-            {name: "Subway Station", value: "subway_station"},
-            {name: "Taxi Stand", value: "taxi_stand"},
-            {name: "Train Station", value: "train_station"},
-            {name: "Transit Station", value: "transit_station"},
-            {name: "Travel Agency", value: "travel_agency"},
-            {name: "Zoo", value: "zoo"}
-        ];
-        // set the default category value
-        $scope.selectedType = $scope.categories[0];
-
-        var geoLat = 0.0;
-        var geolon = 0.0;
-        var otherGeoLat = 0.0;
-        var otherGeoLng = 0.0;
-        // global variable for map use
-        var mapToGeoLoc = "";       
-
-        // init the place list value        
-        var next_page_token = "";
-        var firstPagePlace = "";
-        var secondPagePlace = "";
-        var thirdPagePlace = "";
-        // init the warning value
-        var warnAlertPhotos = false;
-        var warnAlertReviews = false;
-        var warnAlertReviewsGoogle = false;
-        var warnAlertReviewsYelp = false;
-    }
-
-    function initFavList() {
-        // localStorage.removeItem("placesStorage");
-        $scope.localPlaces = [];
-        $scope.favList = [];
-        var placesStorageAll = localStorage.getItem("placesStorage");
-        placesStorageAll = JSON.parse(placesStorageAll);
-        // if the favorite items are deleted to empty
-        if(placesStorageAll != null && placesStorageAll.length == 0) {
-            placesStorageAll = null;
-        }
-        if(placesStorageAll != null) {
-            $scope.localPlaces = placesStorageAll;
-            $scope.favList = [];
-            for(var i = 0; i < $scope.localPlaces.length; i++) {
-                $scope.favList[i] = $scope.localPlaces[i].place_id;
-            }
-        }    
-    }
+    initForm();
+    initFavList();
 
     $scope.enableHere = function() {
         $scope.checkOther = false;
@@ -148,29 +59,6 @@ myApp.controller("appController", ["$scope", "$http", "$showMap", "$showDirectio
         document.getElementById("favoriteTable").classList.remove("my-switch-animation-reverse");
         $scope.warnAlert = false;
     };
-
-    function resetValue() {
-        // reset place table: show the progress bar and hide the others
-        $scope.progressing = true;
-        $scope.warnAlert = false;
-
-        $scope.previousButton = false;
-        $scope.nextButton = false;
-        next_page_token = "";
-        firstPagePlace = "";
-        secondPagePlace = "";
-        thirdPagePlace = "";
-        // reset detail button
-        $scope.isNotTriggered = true;
-        // for animation
-        $scope.showTable = false;
-        $scope.toDetail = false;
-        document.getElementById("placeTable").classList.remove("my-switch-animation-reverse");
-        document.getElementById("favoriteTable").classList.remove("my-switch-animation-reverse");
-        $scope.addToFavorite = false;
-        $scope.placeActive = true;
-        $scope.favActive = false;
-    }
 
     $scope.submitForm = function() {
 
@@ -229,27 +117,6 @@ myApp.controller("appController", ["$scope", "$http", "$showMap", "$showDirectio
             }
         });
     };
-
-    function nextPageCheck(next_page_token) {
-        if(next_page_token != undefined) {
-            $scope.nextButton = true;
-        }
-        if($scope.places == thirdPagePlace) {
-            $scope.previousButton = true;
-        } 
-        else if($scope.places == secondPagePlace) {
-            $scope.previousButton = true;
-            if(next_page_token != undefined || thirdPagePlace != "") {
-                $scope.nextButton = true;
-            }
-        }
-        else if($scope.places == firstPagePlace) {
-            $scope.previousButton = false;
-            if(next_page_token != undefined || secondPagePlace != "") {
-                $scope.nextButton = true;                
-            }
-        }
-    }
 
     $scope.showNextPage = function() {
         // if second page's result has not been fetched
@@ -580,44 +447,6 @@ myApp.controller("appController", ["$scope", "$http", "$showMap", "$showDirectio
 
             });       
     };
-
-    function initDetail() {
-        // for animation
-        $scope.toDetail = true;
-        $scope.showTable = false;
-        $scope.showFavoriteTable = false;
-
-        // show progressing bar
-        $scope.progressing = true;
-        // reset tabs
-        $scope.selectInfo = false;
-        $scope.selectPhotos = false;
-        $scope.selectMap = false;
-        $scope.selectReviews = false;        
-        // reset the review tab
-        $scope.showGoogleReview = false;
-        $scope.showYelpReview = false;
-
-        $scope.isWarnAlertMap = false;
-        mapToGeoLoc = "";
-
-        $scope.warnAlertPhotos = false;
-        warnAlertPhotos = false;
-
-        $scope.warnAlertReviews = false;
-        warnAlertReviews = false;
-        $scope.warnAlertReviewsGoogle = false;
-        warnAlertReviewsGoogle = false;
-        $scope.warnAlertReviewsYelp = false;
-        warnAlertReviewsYelp = false;
-        // enable detail button
-        $scope.isNotTriggered = false;
-        // disable twitter button
-        $scope.twitterDisabled = true;
-        $scope.twitterSrc = "javaScript:void(0)";
-        // store place detail for the use of favorite
-        $scope.placeDetailInfo = "";
-    }
 
     $scope.showInfo = function() {
         $scope.selectInfo = true;
@@ -988,7 +817,176 @@ myApp.controller("appController", ["$scope", "$http", "$showMap", "$showDirectio
         document.getElementById("placeTable").classList.remove("my-switch-animation-reverse");
     };
 
+    function initForm() {
+        $scope.keyword = undefined;
+        $scope.otherLocation = undefined;
+        $scope.isDisabled = true;
+        $scope.checkHere = true;
+        $scope.checkOther = false;
+        $scope.requireKeyword = true;
+        // the search button is disabled before the user location is fetched
+        $scope.isNotFetched = true;
+        // details button is disabled in the beginning
+        $scope.isNotTriggered = true;
+        // switch pills to place table
+        $scope.placeActive = true;
+        $scope.favActive = false;
+        // empty the places info
+        $scope.places = undefined;
 
+        $scope.categories = [
+            {name: "Default", value: "default"},
+            {name: "Airport", value: "airport"},
+            {name: "Amusement Park", value: "amusement_park"},
+            {name: "Aquarium", value: "aquarium"},
+            {name: "Art Gallery", value: "art_gallery"},
+            {name: "Bakery", value: "bakery"},
+            {name: "Bar", value: "bar"},
+            {name: "Beauty Salon", value: "beauty_salon"},
+            {name: "Bowling Alley", value: "bowling_alley"},
+            {name: "Bus Station", value: "bus_station"},
+            {name: "Cafe", value: "cafe"},
+            {name: "Campground", value: "campground"},
+            {name: "Car Rental", value: "car_rental"},
+            {name: "Casino", value: "casino"},
+            {name: "Lodging", value: "lodging"},
+            {name: "Movie Theater", value: "movie_theater"},
+            {name: "Museum", value: "museum"},
+            {name: "Night Club", value: "night_club"},
+            {name: "Park", value: "park"},
+            {name: "Parking", value: "parking"},
+            {name: "Restaurant", value: "restaurant"},
+            {name: "Shopping Mall", value: "shopping_mall"},
+            {name: "Stadium", value: "stadium"},
+            {name: "Subway Station", value: "subway_station"},
+            {name: "Taxi Stand", value: "taxi_stand"},
+            {name: "Train Station", value: "train_station"},
+            {name: "Transit Station", value: "transit_station"},
+            {name: "Travel Agency", value: "travel_agency"},
+            {name: "Zoo", value: "zoo"}
+        ];
+        // set the default category value
+        $scope.selectedType = $scope.categories[0];
+
+        var geoLat = 0.0;
+        var geolon = 0.0;
+        var otherGeoLat = 0.0;
+        var otherGeoLng = 0.0;
+        // global variable for map use
+        var mapToGeoLoc = "";       
+
+        // init the place list value        
+        var next_page_token = "";
+        var firstPagePlace = "";
+        var secondPagePlace = "";
+        var thirdPagePlace = "";
+        // init the warning value
+        var warnAlertPhotos = false;
+        var warnAlertReviews = false;
+        var warnAlertReviewsGoogle = false;
+        var warnAlertReviewsYelp = false;
+    }
+
+    function initFavList() {
+        // localStorage.removeItem("placesStorage");
+        $scope.localPlaces = [];
+        $scope.favList = [];
+        var placesStorageAll = localStorage.getItem("placesStorage");
+        placesStorageAll = JSON.parse(placesStorageAll);
+        // if the favorite items are deleted to empty
+        if(placesStorageAll != null && placesStorageAll.length == 0) {
+            placesStorageAll = null;
+        }
+        if(placesStorageAll != null) {
+            $scope.localPlaces = placesStorageAll;
+            $scope.favList = [];
+            for(var i = 0; i < $scope.localPlaces.length; i++) {
+                $scope.favList[i] = $scope.localPlaces[i].place_id;
+            }
+        }    
+    }
+
+    function resetValue() {
+        // reset place table: show the progress bar and hide the others
+        $scope.progressing = true;
+        $scope.warnAlert = false;
+
+        $scope.previousButton = false;
+        $scope.nextButton = false;
+        next_page_token = "";
+        firstPagePlace = "";
+        secondPagePlace = "";
+        thirdPagePlace = "";
+        // reset detail button
+        $scope.isNotTriggered = true;
+        // for animation
+        $scope.showTable = false;
+        $scope.toDetail = false;
+        document.getElementById("placeTable").classList.remove("my-switch-animation-reverse");
+        document.getElementById("favoriteTable").classList.remove("my-switch-animation-reverse");
+        $scope.addToFavorite = false;
+        $scope.placeActive = true;
+        $scope.favActive = false;
+    }
+
+    function nextPageCheck(next_page_token) {
+        if(next_page_token != undefined) {
+            $scope.nextButton = true;
+        }
+        if($scope.places == thirdPagePlace) {
+            $scope.previousButton = true;
+        } 
+        else if($scope.places == secondPagePlace) {
+            $scope.previousButton = true;
+            if(next_page_token != undefined || thirdPagePlace != "") {
+                $scope.nextButton = true;
+            }
+        }
+        else if($scope.places == firstPagePlace) {
+            $scope.previousButton = false;
+            if(next_page_token != undefined || secondPagePlace != "") {
+                $scope.nextButton = true;                
+            }
+        }
+    }
+
+    function initDetail() {
+        // for animation
+        $scope.toDetail = true;
+        $scope.showTable = false;
+        $scope.showFavoriteTable = false;
+
+        // show progressing bar
+        $scope.progressing = true;
+        // reset tabs
+        $scope.selectInfo = false;
+        $scope.selectPhotos = false;
+        $scope.selectMap = false;
+        $scope.selectReviews = false;        
+        // reset the review tab
+        $scope.showGoogleReview = false;
+        $scope.showYelpReview = false;
+
+        $scope.isWarnAlertMap = false;
+        mapToGeoLoc = "";
+
+        $scope.warnAlertPhotos = false;
+        warnAlertPhotos = false;
+
+        $scope.warnAlertReviews = false;
+        warnAlertReviews = false;
+        $scope.warnAlertReviewsGoogle = false;
+        warnAlertReviewsGoogle = false;
+        $scope.warnAlertReviewsYelp = false;
+        warnAlertReviewsYelp = false;
+        // enable detail button
+        $scope.isNotTriggered = false;
+        // disable twitter button
+        $scope.twitterDisabled = true;
+        $scope.twitterSrc = "javaScript:void(0)";
+        // store place detail for the use of favorite
+        $scope.placeDetailInfo = "";
+    }
 }]);
 
 myApp.service("$showMap", function($q) {
