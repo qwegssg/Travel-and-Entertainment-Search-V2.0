@@ -652,6 +652,7 @@ myApp.controller("appController", ["$scope", "$http", "$showMap", "$showDirectio
 
     var favPageNum = 1;
     $scope.favStart = 0;
+    
     $scope.showNextPageFav = function() {
         $scope.favStart += 20;
         favPageNum++;
