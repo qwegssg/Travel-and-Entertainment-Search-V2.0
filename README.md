@@ -73,7 +73,7 @@ Each of reviews has its author name, author image, time, rating, and content. Th
 ![Sorry! Something wrong with the img.](https://github.com/qwegssg/Travel-and-Entertainment-Search-V2.0/blob/master/snapshots/Reviews_Tab.jpeg)  
 <h4 align = "center">Figure 2.10</h4>  
 
-### 2.4 Favorites Tab  
+### 2.4 Favorites List Tab  
 The favorites tab is very similar to the results tab: the places on the list are displayed in a table; there is a button that allows the user to go to the details view and is disabled initially; the user can search for place details by clicking on the buttons in the “Details” column; pagination is supported with each page containing up to 20 records.  
 ![Sorry! Something wrong with the img.](https://github.com/qwegssg/Travel-and-Entertainment-Search-V2.0/blob/master/snapshots/Fav_Tab.jpeg)  
 <h4 align = "center">Figure 2.11</h4>  
