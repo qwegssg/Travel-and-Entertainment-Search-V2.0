@@ -171,7 +171,6 @@ myApp.controller("appController", ["$scope", "$http", "$showMap", "$showDirectio
 
     var directionsDisplay = new google.maps.DirectionsRenderer;
     var marker = "";
-
     $scope.showDetail = function(place_id, location) {
 
         initDetail();
