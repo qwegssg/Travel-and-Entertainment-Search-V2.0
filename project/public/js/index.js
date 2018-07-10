@@ -217,7 +217,6 @@ myApp.controller("appController", ["$scope", "$http", "$showMap", "$showDirectio
                 function(res) {
                     // console.log(res);
                     $scope.placeDetailInfo = res;
-
                     // end procressing bar
                     $scope.progressing = false;
                     // set the background color of the selected row
