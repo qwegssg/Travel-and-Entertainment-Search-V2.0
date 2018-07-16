@@ -319,10 +319,10 @@ myApp.controller("appController", ["$scope", "$http", "$showMap", "$showDirectio
                     if(res.photos == undefined) {
                         warnAlertPhotos = true;
                     } else {        
-                        var index1 = 0;
-                        var index2 = 0;
-                        var index3 = 0;
-                        var index4 = 0;
+                        var index1 = 0,
+                            index2 = 0,
+                            index3 = 0,
+                            index4 = 0;
                         for(var j = 0; j < res.photos.length; j++) {
                             if(j == 0 || j == 4 || j == 8) {
                                 $scope.photoUrlCol1[index1] = res.photos[j].getUrl({'maxWidth': 1200, 'maxHeight': 1200});
