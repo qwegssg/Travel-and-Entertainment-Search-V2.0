@@ -1,4 +1,5 @@
-# Travel-and-Entertainment-Search-V2.0. 
+# Travel-and-Entertainment-Search-V2.0.  
+### Application link: http://nodejsyutaoren.us-east-2.elasticbeanstalk.com/  
 ## 1. Introduction
 Create a webpage that allows users to search for places using the Google Places API and display the search results on the same page below the form. Once the user clicks on a button to search for place details, the webpage displays several tabs which contain an info table, photos of the place, map and route search form and reviews respectively. The webpage also supports adding places to and removing places from favorites list and posting place info to Twitter.  
 
@@ -93,5 +94,3 @@ The following are snapshots of the webpage opened with Safari on iPhone 8.
 <img src="https://github.com/qwegssg/Travel-and-Entertainment-Search-V2.0/blob/master/snapshots/6.jpg" width="25%">
 </div>  
 <br>  
-
-### Application link: http://nodejsyutaoren.us-east-2.elasticbeanstalk.com/
