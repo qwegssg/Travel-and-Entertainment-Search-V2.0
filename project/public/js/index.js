@@ -210,7 +210,7 @@ myApp.controller("appController", ["$scope", "$http", "$showMap", "$showDirectio
               }
         });
         mapForStreetView.setStreetView(panorama);
-        $scope.streetViewIcon = "http://cs-server.usc.edu:45678/hw/hw8/images/Pegman.png";
+        $scope.streetViewIcon = "./assets/pegman.jpg";
 
         $showMap.fetchDetail(place_id, map)
             .then(
@@ -524,15 +524,15 @@ myApp.controller("appController", ["$scope", "$http", "$showMap", "$showDirectio
     };
 
     $scope.showStreetView = function() {
-        if($scope.streetViewIcon == "http://cs-server.usc.edu:45678/hw/hw8/images/Pegman.png") {
+        if($scope.streetViewIcon == "./assets/pegman.jpg") {
             $scope.showStreet = true;
             // hide the map
             $scope.isWarnAlertMap = true;
-            $scope.streetViewIcon = "http://cs-server.usc.edu:45678/hw/hw8/images/Map.png";        
+            $scope.streetViewIcon = "./assets/map.png";        
         } else {
             $scope.showStreet = false;
             $scope.isWarnAlertMap = false;
-            $scope.streetViewIcon = "http://cs-server.usc.edu:45678/hw/hw8/images/Pegman.png";
+            $scope.streetViewIcon = "./assets/pegman.jpg";
         }
     };
 
