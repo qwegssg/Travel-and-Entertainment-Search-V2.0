@@ -72,7 +72,7 @@ myApp.controller("appController", ["$scope", "$http", "$showMap", "$showDirectio
         if($scope.checkOther == false) {
             otherLocation = undefined;
         }
-        var url = "http://nodejsyutaoren.us-east-2.elasticbeanstalk.com/search?keyword=" + $scope.keyword + "&category=" + $scope.selectedType.value 
+        var url = "search?keyword=" + $scope.keyword + "&category=" + $scope.selectedType.value 
                     + "&distance=" + $scope.distance + "&geoLocation=" + $scope.location
                     + "&otherLocation=" + encodeURI(otherLocation);
         // console.log(url);
@@ -89,7 +89,7 @@ myApp.controller("appController", ["$scope", "$http", "$showMap", "$showDirectio
                 otherGeoLat = result.lat;
                 otherGeoLng = result.lng;
                 var otherLocation = undefined;
-                url = "http://nodejsyutaoren.us-east-2.elasticbeanstalk.com/search?keyword=" + $scope.keyword + "&category=" + $scope.selectedType.value 
+                url = "search?keyword=" + $scope.keyword + "&category=" + $scope.selectedType.value 
                     + "&distance=" + $scope.distance + "&geoLocation=" + geoLocation
                     + "&otherLocation=" + otherLocation;
                 $http.get(url)
@@ -121,7 +121,7 @@ myApp.controller("appController", ["$scope", "$http", "$showMap", "$showDirectio
     $scope.showNextPage = function() {
         // if second page's result has not been fetched
         if(secondPagePlace == "") {
-            var nextPageUrl = "http://nodejsyutaoren.us-east-2.elasticbeanstalk.com/next?next_page_token=" + next_page_token;
+            var nextPageUrl = "next?next_page_token=" + next_page_token;
             $http.get(nextPageUrl)
             .then(function(result) {
                 $scope.nextButton = false;
@@ -139,7 +139,7 @@ myApp.controller("appController", ["$scope", "$http", "$showMap", "$showDirectio
         } 
         // if third page's result has not been fetched
         else if (thirdPagePlace == "") {
-            var nextPageUrl = "http://nodejsyutaoren.us-east-2.elasticbeanstalk.com/next?next_page_token=" + next_page_token;
+            var nextPageUrl = "next?next_page_token=" + next_page_token;
             $http.get(nextPageUrl)
             .then(function(result) {
                 $scope.nextButton = false;
@@ -403,10 +403,10 @@ myApp.controller("appController", ["$scope", "$http", "$showMap", "$showDirectio
                     // fetch city
                     cityName = address.slice(cityStartIndex + 2);
                     if(res.formatted_address.length > 64) {
-                        yelpMatchUrl = "http://nodejsyutaoren.us-east-2.elasticbeanstalk.com/yelpSearch?name=" + res.name + "&city=" + cityName 
+                        yelpMatchUrl = "yelpSearch?name=" + res.name + "&city=" + cityName 
                                 + "&state=" + stateName + "&country=US";                        
                     } else {
-                        yelpMatchUrl = "http://nodejsyutaoren.us-east-2.elasticbeanstalk.com/yelpSearch?name=" + res.name + "&city=" + cityName 
+                        yelpMatchUrl = "yelpSearch?name=" + res.name + "&city=" + cityName 
                                 + "&state=" + stateName + "&country=US&address1=" + res.formatted_address;                        
                     }
                     $http.get(yelpMatchUrl)
@@ -418,7 +418,7 @@ myApp.controller("appController", ["$scope", "$http", "$showMap", "$showDirectio
                                 warnAlertReviews = true;
                                 warnAlertReviewsYelp = true;
                             } else {
-                                var yelpReviewUrl = "http://nodejsyutaoren.us-east-2.elasticbeanstalk.com/yelpReview?id=" + result.data.businesses[0].id;
+                                var yelpReviewUrl = "yelpReview?id=" + result.data.businesses[0].id;
                                 $http.get(yelpReviewUrl)
                                     .then(function(res) {
                                         if(res.data.reviews != undefined) {
